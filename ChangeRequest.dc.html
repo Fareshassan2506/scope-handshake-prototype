@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CR-014 — Supplier Portal Synchronization</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.5;color:#141821;background:#F6F7F9;-webkit-font-smoothing:antialiased}
+a{color:#1B2B4B;text-decoration:none}
+a:hover{color:#0E1A33}
+h1,h2,h3,h4{font-family:'Space Grotesk',ui-sans-serif,sans-serif;font-weight:500;margin:0;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+.app{display:flex;flex-wrap:wrap;min-height:100vh;align-items:flex-start}
+.side{width:240px;flex:0 0 240px;background:#fff;border-right:1px solid #E4E7EC;padding:20px 14px 28px;align-self:stretch}
+.main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column}
+.wm{display:flex;align-items:center;gap:9px;padding:4px 8px 22px}
+.wm span{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em;color:#1B2B4B}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a,.nav button{display:flex;align-items:center;gap:10px;min-height:34px;padding:0 10px;border-radius:8px;color:#495363;font-size:13.5px;background:none;border:none;text-align:left;width:100%}
+.nav a:hover,.nav button:hover{background:#F6F7F9;color:#1B2B4B}
+.nav a.on{background:#F0EAFF;color:#5B37AE;font-weight:600}
+.nav svg{flex:0 0 16px;color:#8A93A3}
+.nav a.on svg{color:#6B46C1}
+.divider{height:1px;background:#E4E7EC;margin:12px 6px}
+.top{min-height:64px;background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap}
+.search{flex:1 1 220px;max-width:420px;height:36px;border:1px solid #E4E7EC;border-radius:8px;padding:0 12px;background:#F6F7F9;color:#495363;font:inherit}
+.concept{font-size:11px;color:#5B6472;border:1px dashed #C9CFD9;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.who{display:flex;align-items:center;gap:10px;margin-left:auto}
+.av{width:32px;height:32px;border-radius:999px;background:#1B2B4B;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;flex:0 0 32px}
+.crumb{background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:9px;padding:11px 24px;color:#5B6472;font-size:13px;flex-wrap:wrap}
+.crumb b{color:#141821;font-weight:500}
+.crumb button{background:none;border:none;padding:0;font:inherit;color:#1B2B4B}
+.body{padding:18px 24px 24px;display:flex;flex-direction:column;gap:20px;position:relative}
+.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1px solid #DFE3E8;background:#F1F3F5;color:#434C5A;white-space:nowrap}
+.pill.green{background:#E9F7EF;border-color:#A9DCBF;color:#13603A}
+.pill.red{background:#FDEDEB;border-color:#F0B7B0;color:#9F2318}
+.pill.amber{background:#FFF6E0;border-color:#EFD69B;color:#7A5000}
+.pill.navy{background:#EEF1F6;border-color:#C6CFDD;color:#1B2B4B}
+.new{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;background:#F0EAFF;border:1px solid #C9B8F2;color:#5B37AE;white-space:nowrap}
+.r2{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;background:#F1F3F5;border:1px dashed #BFC7D2;color:#5B6472;white-space:nowrap}
+.sht{font-size:11px;font-family:'Space Grotesk',sans-serif;color:#495363;background:#F1F3F5;border:1px solid #DFE3E8;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid #1B2B4B;background:#1B2B4B;color:#fff;font-weight:500;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#13213C}
+.btn.ghost{background:#fff;color:#1B2B4B;border-color:#C6CFDD}
+.btn.ghost:hover{background:#F2F5FA}
+.btn.sm{height:32px;padding:0 12px;font-size:12.5px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A8494;font-weight:600}
+.muted{color:#5B6472}
+.mono{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
+.foot{font-size:11.5px;color:#7A8494}
+.stepper{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:8px}
+.stepper a{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:13px;color:#5B6472}
+.stepper a:hover{background:#F6F7F9}
+.stepper a.on{background:#1B2B4B;color:#fff;font-weight:500}
+.stepper a.on .num{background:rgba(255,255,255,.22);color:#fff}
+.num{width:20px;height:20px;border-radius:999px;background:#EEF1F6;color:#495363;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600}
+.sep{display:flex;align-items:center;color:#C2C9D4}
+.about{background:none;border:none;padding:0;font-size:12.5px;color:#5B6472;display:inline-flex;align-items:center;gap:6px;align-self:flex-start}
+.aboutbox{font-size:13px;color:#434C5A;background:#fff;border-radius:10px;padding:11px 14px;max-width:760px}
+.toolbar{background:#fff;border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pipe{display:flex;align-items:center;flex-wrap:wrap}
+.pstep{display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:#F1F3F5;color:#5B6472;font-size:12px;white-space:nowrap}
+.pstep.on{background:#1B2B4B;color:#fff;font-weight:600}
+.pstep.done{background:#E9F7EF;color:#13603A;font-weight:600}
+.parrow{color:#C2C9D4;padding:0 6px}
+.sheet{width:100%;max-width:880px;margin:0 auto;background:#fff;border-radius:4px;box-shadow:0 18px 44px rgba(20,24,33,.10);padding:52px 60px 60px;display:flex;flex-direction:column;gap:26px}
+.sheet h2{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:#1B2B4B;border-bottom:1px solid #E4E7EC;padding-bottom:7px}
+.sheet p{margin:0;font-size:14.5px;line-height:1.65}
+.sheet section{display:flex;flex-direction:column;gap:11px}
+sup a{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#5B37AE;background:#F4F0FF;border-radius:4px;padding:0 3px;margin-left:2px;vertical-align:super;line-height:1.4}
+.quote{border-left:3px solid #C6CFDD;background:#FAFBFD;padding:11px 15px;border-radius:0 8px 8px 0;font-style:italic;color:#2C3444}
+.quote.p{border-left-color:#C9B8F2;background:#FCFAFF}
+.ref{font-family:'Space Grotesk',sans-serif;font-size:11px;color:#5B6472;font-style:normal;display:block;margin-top:6px}
+.svn{display:flex;flex-direction:column;gap:8px;background:#F8F9FB;border-radius:10px;padding:14px 16px}
+.svnbar{display:flex;height:16px;border-radius:999px;overflow:hidden;background:#EEF1F6}
+.humanbadge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:#EEF1F6;color:#1B2B4B;border-radius:999px;padding:3px 9px}
+.opttable{display:flex;flex-direction:column;border-radius:10px;overflow:hidden;background:#F8F9FB}
+.optrow{display:flex;gap:14px;padding:13px 15px;border-bottom:1px solid #fff;flex-wrap:wrap}
+.optkey{flex:0 0 150px;font-weight:600;font-size:13.5px}
+.hist{display:flex;flex-direction:column}
+.hitem{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid #EEF0F3}
+.hitem:last-child{border-bottom:none}
+.hdot{width:26px;height:26px;flex:0 0 26px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#F1F3F5;color:#495363;font-size:13px}
+.hdot.p{background:#F4F0FF;color:#6B46C1}
+.hdot.g{background:#E9F7EF;color:#13603A}
+.srcs{display:flex;flex-direction:column;gap:8px}
+.srcitem{display:flex;gap:10px;font-size:12.5px;color:#434C5A}
+.srcn{font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#5B37AE;background:#F4F0FF;border-radius:4px;padding:1px 4px;height:18px}
+.tip{background:#1B2B4B;color:#fff;font-size:12px;border-radius:8px;padding:7px 11px}
+.pendbox{background:#FFFBEF;border-radius:10px;padding:12px 14px;font-size:13px;color:#4A3A12}
+.recbox{background:#F8F9FB;border-radius:10px;padding:12px 14px;font-size:13px}
+.collapse{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:7px;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:#1B2B4B;font-family:'Space Grotesk',sans-serif;border-bottom:1px solid #E4E7EC;padding-bottom:7px;width:100%;text-align:left}
+.lockbox{background:#F1F3F5;border-radius:9px;padding:9px 11px;font-size:12px;color:#495363;display:flex;gap:8px;align-items:center}
+.navi{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #E4E7EC;padding-top:14px}
+.tour{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:flex-end;gap:8px;background:#fff;border-bottom:1px solid #E4E7EC;padding:8px 24px}
+.tour .tl{font-size:12px;color:#7A8494;margin-right:auto}
+.tour a.tb{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 13px;border-radius:8px;font-size:12.5px;font-weight:500;text-decoration:none;border:1px solid #C6CFDD;color:#1B2B4B;background:#fff}
+.tour a.tb:hover{background:#F2F5FA}
+.tour a.tb.next{background:#1B2B4B;border-color:#1B2B4B;color:#fff}
+.tour a.tb.next:hover{background:#13213C}
+</style>
+</helmet>
+
+<div class="app">
+  <aside class="side">
+    <div class="wm">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="5" cy="5" r="3" fill="#1B2B4B"></circle><circle cx="15" cy="5" r="3" fill="#6B46C1"></circle><circle cx="5" cy="15" r="3" fill="#6B46C1"></circle><circle cx="15" cy="15" r="3" fill="#1B2B4B"></circle></svg>
+      <span>peaktify</span>
+    </div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 7L8 2.5 13.5 7v6.5h-11z"></path><path d="M6.5 13.5v-4h3v4"></path></svg>Home</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 4.5h5l1.2 1.5H14v7.5H2z"></path></svg>Projects</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 11-2.1-4.3"></path><path d="M13.8 2.5v3.2h-3.2"></path></svg>Work Cycles</button>
+      <a class="on" href="Decisions.dc.html"><svg width="16" height="16" viewBox="0 0 20 16" aria-hidden="true"><path d="M9 2a6 6 0 000 12z" fill="currentColor"></path><path d="M11 2a6 6 0 010 12z" fill="#1B2B4B"></path></svg>Scope Handshake <span class="new" style="margin-left:auto">NEW</span></a>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 9.5l2-6h8l2 6v3.5H2z"></path></svg>Inbox</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.3" y="3.3" width="11.4" height="10.4" rx="1.5"></rect></svg>Calendar</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 13.5V4l5-2 5 2v9.5"></path></svg>Customers</button>
+    </nav>
+    <div class="divider"></div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="6" r="2.4"></circle><path d="M2 13.5c0-2.2 1.8-3.6 4-3.6s4 1.4 4 3.6"></path></svg>Members</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.6 4.8 4.8 1.6-4.8 1.6L8 14.4l-1.6-4.8L1.6 8l4.8-1.6z" fill="none" stroke="currentColor" stroke-width="1.3"></path></svg>Agents</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"></rect><circle cx="8" cy="8" r="2.4"></circle></svg>Private Vault</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8 2l5 2v4c0 3-2.1 5.2-5 6-2.9-.8-5-3-5-6V4z"></path></svg>Security</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="2.2"></circle><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2"></path></svg>Settings</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2v4M10 2v4M4.5 6h7v3.5a3.5 3.5 0 01-7 0zM8 13v1.8"></path></svg>Integrations</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <input class="search" type="search" aria-label="Search" value="Search projects, work cycles, artifacts…">
+      <span class="concept">Concept prototype — Scope Handshake (not a Peaktify release)</span>
+      <div class="who">
+        <span class="muted mono" style="font-size:12.5px">Tuesday, October 20, 2026</span>
+        <span class="av">LH</span>
+        <span class="col" style="line-height:1.25"><b style="font-size:13px">Lina Haddad</b><span class="muted" style="font-size:11.5px">Delivery Lead</span></span>
+      </div>
+    </header>
+    <nav class="tour" aria-label="Screen navigation"><span class="tl">Screen 6 of 8</span><a class="tb back" href="FindingDetail.dc.html">← Finding · the handshake</a><a class="tb next" href="PChat.dc.html">Ask P →</a></nav>
+
+    <nav class="crumb">
+      <a href="FindingDetail.dc.html#f01">← Back</a>
+      <span style="color:#C2C9D4">|</span>
+      <span>Atlas Industrial Group</span>
+      <span>›</span>
+      <a href="Decisions.dc.html">Sold vs Found</a>
+      <span>›</span>
+      <b>CR-014</b>
+    </nav>
+
+    <div class="body">
+      <sc-if value="{{note}}" hint-placeholder-val="{{ false }}">
+        <div class="lockbox" style="background:#fff;border:1px solid #D7DCE4"><b>Not part of this prototype.</b><span class="muted">Only the Scope Handshake path is built out.</span><button class="btn sm ghost" type="button" onClick="{{clearNote}}" style="margin-left:auto">Close</button></div>
+      </sc-if>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="stepper" role="navigation" aria-label="Scope Handshake story">
+          <a href="PromiseList.dc.html"><span class="num">1</span>Promise</a>
+          <span class="sep">→</span>
+          <a href="Decisions.dc.html"><span class="num">2</span>Found</a>
+          <span class="sep">→</span>
+          <a href="FindingDetail.dc.html#step1"><span class="num">3</span>Check</a>
+          <span class="sep">→</span>
+          <a href="FindingDetail.dc.html#step2"><span class="num">4</span>Decide</a>
+          <span class="sep">→</span>
+          <a class="on" href="ChangeRequest.dc.html"><span class="num">5</span>Act</a>
+        </div>
+        <span class="sht">S6 · Oct 20 · 14:30</span>
+      </div>
+      <button class="about" type="button" onClick="{{toggleAbout}}">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.2"></circle><path d="M8 7.2v4M8 5h.01"></path></svg>
+        About this screen
+      </button>
+      <sc-if value="{{about}}" hint-placeholder-val="{{ false }}">
+        <div class="aboutbox">The change request writes itself from evidence already captured — both quotes, both sources, the human-entered effort. Export stays locked until the Delivery Lead approves it: AI drafts, humans send.</div>
+      </sc-if>
+
+      <div class="col" style="gap:8px">
+        <div class="row" style="gap:9px">
+          <span class="new"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.3 4.7L12 6l-4.7 1.3L6 12 4.7 7.3 0 6l4.7-1.3z" fill="currentColor"></path></svg>NEW · Scope Handshake</span>
+          <span class="r2">Release 2 preview</span>
+        </div>
+        <h1 style="font-size:27px">CR-014 · Supplier Portal Synchronization</h1>
+      </div>
+
+      <div class="toolbar">
+        <div class="pipe">
+          <span class="pstep {{s1}}">Draft</span><span class="parrow">→</span>
+          <span class="pstep {{s2}}">Approved internally</span><span class="parrow">→</span>
+          <span class="pstep {{s3}}">Sent to Atlas</span><span class="parrow">→</span>
+          <span class="pstep">Accepted / Rejected by Atlas</span>
+        </div>
+        <div class="row" style="gap:9px;margin-left:auto">
+          <sc-if value="{{canEdit}}" hint-placeholder-val="{{ true }}"><button class="btn sm ghost" type="button" onClick="{{startEdit}}">Edit</button></sc-if>
+          <sc-if value="{{draft}}" hint-placeholder-val="{{ true }}"><button class="btn sm" type="button" onClick="{{approve}}">Approve</button></sc-if>
+          <button class="btn sm ghost" type="button" disabled="{{draft}}" onClick="{{expPdf}}" title="AI drafts, humans send.">Export PDF</button>
+          <button class="btn sm ghost" type="button" disabled="{{draft}}" onClick="{{expWord}}" title="AI drafts, humans send.">Export Word</button>
+          <button class="btn sm ghost" type="button" disabled="{{cantSend}}" onClick="{{markSent}}" title="Recorded by the Delivery Lead after she sends it herself.">Mark as sent</button>
+        </div>
+        <sc-if value="{{draft}}" hint-placeholder-val="{{ true }}"><span class="tip">Export disabled — “AI drafts, humans send.”</span></sc-if>
+        <sc-if value="{{approvedOnly}}" hint-placeholder-val="{{ false }}"><span class="pill green">Approved internally · exports unlocked</span></sc-if>
+        <sc-if value="{{sent}}" hint-placeholder-val="{{ false }}"><span class="pill blue">Sent to Atlas by Lina Haddad · Oct 20 · waiting for Atlas</span></sc-if>
+        <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><span class="tip">{{toast}}</span></sc-if>
+        <span class="muted" style="font-size:12px">Customer acceptance is recorded by the Delivery Lead.</span>
+      </div>
+
+      <div class="sheet">
+        <div class="col" style="gap:14px">
+          <div class="row" style="justify-content:space-between"><span class="eyebrow">Atlas Industrial Group · ATLAS-D365-F&amp;SCM</span><span class="eyebrow">Change request · 20 October 2026</span></div>
+          <h1 style="font-size:28px;line-height:1.25">Supplier portal synchronization with Dynamics 365</h1>
+          <div class="row" style="gap:8px"><span class="pill navy">CR-014</span><span class="pill">Finding F-01</span><span class="pill">Promise P4 · list v1</span><span class="pill {{statusCls}}">{{status}}</span></div>
+        </div>
+
+        <section>
+          <h2>Background</h2>
+          <sc-if value="{{showOrig}}" hint-placeholder-val="{{ true }}"><p>The Source-to-Pay scope for Atlas Industrial Group was priced on the assumption that the existing supplier portal stays outside Dynamics 365, with no integration work in the estimate.<sup><a href="#s2">2</a></sup> Discovery workshop WS-07 on 16 October established that supplier information and status must stay synchronized between that portal and Dynamics 365.<sup><a href="#s3">3</a></sup> This change request sets out what was sold, what was found, the proposed approach and the effort impact, so Atlas can decide.</p></sc-if>
+          <sc-if value="{{showEdited}}" hint-placeholder-val="{{ false }}"><p>{{bgText}}</p><span class="pill">Edited by Lina Haddad · Oct 20</span></sc-if>
+          <sc-if value="{{editing}}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px"><textarea aria-label="Edit background" style="width:100%;min-height:110px;font:inherit;border:1px solid #C6CFDD;border-radius:9px;padding:10px" value="{{bgText}}" onChange="{{setBg}}"></textarea><div style="display:flex;gap:8px"><button class="btn sm" type="button" onClick="{{saveEdit}}">Save</button><button class="btn sm ghost" type="button" onClick="{{cancelEdit}}">Cancel</button></div></div></sc-if>
+        </section>
+
+        <section>
+          <h2>What was sold</h2>
+          <div class="quote">“The existing supplier portal remains outside the scope of Dynamics 365.”<span class="ref">Proposal_Atlas_v3.pdf · §5 Assumptions · p.9<sup><a href="#s1">1</a></sup> · estimate line “Supplier portal integration” priced at 0 days<sup><a href="#s2">2</a></sup></span></div>
+          <p>Recorded as promise <b>P4</b> in the locked promise list (v1, 1 October 2026). No estimate line carries integration build, test or support for the portal.</p>
+        </section>
+
+        <section>
+          <h2>What was found</h2>
+          <div class="quote p">“Supplier information and status must stay synchronized between the existing supplier portal and Dynamics 365.”<span class="ref">WS-07 Supplier Management · p.3 · Rania Samir, Group Procurement Lead<sup><a href="#s3">3</a></sup></span></div>
+          <p>Recorded as finding <b>F-01</b>, confidence High. The technical label <b>Integration</b> and the match with P4 were confirmed by Omar Farid, Functional Consultant, on 20 October 2026.<sup><a href="#s4">4</a></sup></p>
+        </section>
+
+        <section>
+          <h2>Proposed approach — pending Solution Architect validation</h2>
+          <div class="pendbox"><b>Not yet validated.</b> Drafted from documentation and past delivery; Sara Mansour (Solution Architect) validates it before this pack is sent.</div>
+          <p>Supplier master data and status could be exchanged using standard integration options (data entities via OData; business or data events to notify the portal of changes).<sup><a href="#s5">5</a></sup> Which entities, fields and event types fit Atlas, and whether any extension is needed, must be validated by the Solution Architect.</p>
+          <p>Portal-side changes are required and sit with Atlas or the portal vendor: consuming the events, mapping supplier identifiers, and handling retries. Scope here covers the Dynamics 365 side, the interface contract, and joint testing.</p>
+        </section>
+
+        <section>
+          <h2>Effort impact</h2>
+          <div class="svn">
+            <span class="eyebrow">Sold vs needed</span>
+            <div class="svnbar"><i style="flex:.4;background:#1B2B4B"></i><i style="flex:18;background:#D98A00"></i></div>
+            <span style="font-size:13.5px"><b class="mono">Priced: 0 days</b> · <b class="mono" style="color:#7A5000">Extra beyond priced (entered by Lina Haddad): +18 days</b> · <b class="mono">Total needed: 18 days</b></span>
+            <div class="row" style="gap:10px"><span class="humanbadge">Entered by Lina Haddad · AI never estimates effort</span><span class="muted" style="font-size:12.5px">Design 4 d · build 8 d · test and joint test 4 d · deployment and handover 2 d</span></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Options for Atlas</h2>
+          <div class="opttable">
+            <div class="optrow"><span class="optkey">Approve CR-014</span><span style="flex:1 1 300px;min-width:0;font-size:13.5px">Synchronization delivered in this rollout · +18 person-days of work · timeline impact to be agreed with Atlas.</span></div>
+            <div class="optrow"><span class="optkey">Defer to phase 2</span><span style="flex:1 1 300px;min-width:0;font-size:13.5px">Go live with the portal unchanged. Supplier data is maintained in both systems until phase 2.</span></div>
+            <div class="optrow"><span class="optkey">Keep manual process</span><span style="flex:1 1 300px;min-width:0;font-size:13.5px">Atlas accepts manual maintenance of supplier records in the portal; a documented operating procedure is delivered instead.</span></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>What stays on record</h2>
+          <div class="recbox"><b>What was originally sold stays on record: P4 v1 (Oct 1, 2026).</b> If Atlas accepts, a new promise <b>P7 “Supplier portal synchronization (CR-014)”</b> is added in promise list v2. The original assumption is never overwritten.</div>
+        </section>
+
+        <section>
+          <button class="collapse" type="button" onClick="{{toggleHist}}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="transform:rotate({{hRot}}deg)"><path d="M5 3l5 5-5 5"></path></svg>Decision history</button>
+          <sc-if value="{{histOpen}}" hint-placeholder-val="{{ false }}">
+            <div class="hist">
+              <div class="hitem"><span class="hdot p">✦</span><div class="col" style="gap:2px"><b style="font-size:13.5px">Scope Handshake AI flagged a possible conflict with P4</b><span class="muted" style="font-size:12.5px">Oct 20, 09:40 · WS-07 p.3 vs Proposal §5 p.9</span></div></div>
+              <div class="hitem"><span class="hdot g">✓</span><div class="col" style="gap:2px"><b style="font-size:13.5px">Omar Farid confirmed the match and the technical label: Integration</b><span class="muted" style="font-size:12.5px">Oct 20, 11:05 · expert judgement + Microsoft documentation</span></div></div>
+              <div class="hitem"><span class="hdot">LH</span><div class="col" style="gap:2px"><b style="font-size:13.5px">Lina Haddad recorded: Raise change request · +18 person-days beyond the 0 priced</b><span class="muted" style="font-size:12.5px">Oct 20, 14:20 · reason: “Estimate assumed no integration (0 days priced). Synchronization requires integration build and testing.” · consulted: Karim Adel</span></div></div>
+              <sc-if value="{{approved}}" hint-placeholder-val="{{ false }}"><div class="hitem"><span class="hdot g">✓</span><div class="col" style="gap:2px"><b style="font-size:13.5px">Lina Haddad approved the pack internally</b><span class="muted" style="font-size:12.5px">Oct 20, 14:35 · exports unlocked · not yet sent to Atlas</span></div></div></sc-if>
+            </div>
+          </sc-if>
+        </section>
+
+        <section>
+          <button class="collapse" type="button" onClick="{{toggleSrc}}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="transform:rotate({{sRot}}deg)"><path d="M5 3l5 5-5 5"></path></svg>Sources</button>
+          <sc-if value="{{srcOpen}}" hint-placeholder-val="{{ false }}">
+            <div class="srcs">
+              <div class="srcitem" id="s1"><span class="srcn">1</span><span>Proposal_Atlas_v3.pdf · §5 Assumptions · p.9</span></div>
+              <div class="srcitem" id="s2"><span class="srcn">2</span><span>Estimate_Atlas_S2P.xlsx · line “Supplier portal integration” · 0 days</span></div>
+              <div class="srcitem" id="s3"><span class="srcn">3</span><span>WS-07 Supplier Management workshop · p.3 · Rania Samir · 16 Oct 2026</span></div>
+              <div class="srcitem" id="s4"><span class="srcn">4</span><span>Scope Handshake · F-01 technical confirmation · Omar Farid · 20 Oct 2026</span></div>
+              <div class="srcitem" id="s5"><span class="srcn">5</span><span>Microsoft Learn · Integrate with finance and operations apps (overview) · updated Oct 2024</span></div>
+            </div>
+          </sc-if>
+        </section>
+
+        <div class="row" style="justify-content:space-between;border-top:1px solid #E4E7EC;padding-top:16px">
+          <span class="muted" style="font-size:12px">Drafted by Scope Handshake AI from the evidence above. Effort entered by a human. Approach pending architect validation.</span>
+          <span class="pill {{statusCls}}">{{status}}</span>
+        </div>
+      </div>
+
+      <p class="foot" style="text-align:center;margin:8px 0 0">Findings and customer quotes come from the case brief; names, day counts and file names are illustrative.</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2240}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sent: false, toast: '', editing: false, edited: false, bgText: 'The Source-to-Pay scope for Atlas Industrial Group was priced on the assumption that the existing supplier portal stays outside Dynamics 365, with no integration work in the estimate. Discovery workshop WS-07 on 16 October established that supplier information and status must stay synchronized between that portal and Dynamics 365. This change request sets out what was sold, what was found, the proposed approach and the effort impact, so Atlas can decide.', approved: false, about: false, note: false, histOpen: false, srcOpen: false };
+  }
+  renderVals() {
+    const s = this.state;
+    const a = s.approved;
+    return {
+      approved: a, draft: !a,
+      status: s.sent ? 'Sent to Atlas · waiting for answer' : a ? 'Approved internally' : 'Draft · awaiting Delivery Lead approval', statusCls: a ? 'green' : 'amber',
+      s1: a ? 'done' : 'on', s2: s.sent ? 'done' : (a ? 'on' : ''), s3: s.sent ? 'on' : '',
+      approvedOnly: a && !s.sent, sent: s.sent, toast: s.toast, cantSend: !a || s.sent,
+      markSent: () => this.setState({ sent: true, toast: '' }),
+      expPdf: () => this.setState({ toast: 'CR-014.pdf exported (demo) · nothing is sent to Atlas automatically' }),
+      expWord: () => this.setState({ toast: 'CR-014.docx exported (demo) · nothing is sent to Atlas automatically' }),
+      canEdit: !s.editing && !s.sent, editing: s.editing, showOrig: !s.editing && !s.edited, showEdited: !s.editing && s.edited, bgText: s.bgText,
+      startEdit: () => this.setState({ editing: true }), setBg: (e) => this.setState({ bgText: e.target.value }), saveEdit: () => this.setState({ editing: false, edited: true }), cancelEdit: () => this.setState({ editing: false }),
+      approve: () => this.setState({ approved: true, histOpen: true }),
+      histOpen: s.histOpen, hRot: s.histOpen ? 90 : 0, toggleHist: () => this.setState({ histOpen: !s.histOpen }),
+      srcOpen: s.srcOpen, sRot: s.srcOpen ? 90 : 0, toggleSrc: () => this.setState({ srcOpen: !s.srcOpen }),
+      about: s.about, toggleAbout: () => this.setState({ about: !s.about }),
+      note: s.note, nope: () => this.setState({ note: true }), clearNote: () => this.setState({ note: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

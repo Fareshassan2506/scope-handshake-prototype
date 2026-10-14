@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Atlas case, solved</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.5;color:#141821;background:#F6F7F9;-webkit-font-smoothing:antialiased}
+a{color:#1B2B4B;text-decoration:none}
+a:hover{color:#0E1A33}
+h1,h2,h3,h4{font-family:'Space Grotesk',ui-sans-serif,sans-serif;font-weight:500;margin:0;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+.wrap{min-height:100vh;display:flex;flex-direction:column}
+.top{min-height:64px;background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:16px;padding:12px 32px;flex-wrap:wrap}
+.wm{display:flex;align-items:center;gap:9px}
+.wm span{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em;color:#1B2B4B}
+.concept{font-size:11px;color:#5B6472;border:1px dashed #C9CFD9;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.sht{font-size:11px;font-family:'Space Grotesk',sans-serif;color:#495363;background:#F1F3F5;border:1px solid #DFE3E8;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.body{padding:40px 32px 32px;display:flex;flex-direction:column;gap:26px;max-width:1120px;width:100%;margin:0 auto}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A8494;font-weight:600}
+.muted{color:#5B6472}
+.foot{font-size:11.5px;color:#7A8494}
+.new{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;background:#F0EAFF;border:1px solid #C9B8F2;color:#5B37AE;white-space:nowrap}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid #1B2B4B;background:#1B2B4B;color:#fff;font-weight:500;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.ghost{background:#fff;color:#1B2B4B;border-color:#C6CFDD}
+.btn.ghost:hover{background:#F2F5FA}
+.tbl{display:flex;flex-direction:column;border-radius:12px;overflow:hidden;background:#fff}
+.thead{display:flex;gap:14px;padding:11px 16px;background:#F8F9FB}
+.thead span{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#7A8494;font-weight:600}
+.trow{display:flex;gap:14px;padding:14px 16px;border-bottom:1px solid #EEF0F3;align-items:flex-start;color:#141821}
+.trow:last-child{border-bottom:none}
+.trow:hover{background:#FCFDFF}
+.c1{flex:1 1 320px;min-width:0;font-size:14px;font-weight:500}
+.c2{flex:1.3 1 360px;min-width:0;font-size:13.5px;color:#434C5A}
+.c3{flex:0 0 150px;display:flex;justify-content:flex-end}
+.scr{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:600;background:#EEF1F6;color:#1B2B4B;white-space:nowrap}
+.qbox{display:flex;flex-direction:column;gap:8px;border-left:3px solid #C9B8F2;background:#fff;padding:13px 16px;border-radius:0 10px 10px 0}
+.q{font-style:italic;font-size:15px;color:#2C3444}
+.closing{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:#1B2B4B;color:#fff;border-radius:14px;padding:20px 24px}
+.navi{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #E4E7EC;padding-top:16px}
+.tour{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:flex-end;gap:8px;background:#fff;border-bottom:1px solid #E4E7EC;padding:8px 24px}
+.tour .tl{font-size:12px;color:#7A8494;margin-right:auto}
+.tour a.tb{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 13px;border-radius:8px;font-size:12.5px;font-weight:500;text-decoration:none;border:1px solid #C6CFDD;color:#1B2B4B;background:#fff}
+.tour a.tb:hover{background:#F2F5FA}
+.tour a.tb.next{background:#1B2B4B;border-color:#1B2B4B;color:#fff}
+.tour a.tb.next:hover{background:#13213C}
+</style>
+</helmet>
+
+<div class="wrap">
+  <header class="top">
+    <div class="wm">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="5" cy="5" r="3" fill="#1B2B4B"></circle><circle cx="15" cy="5" r="3" fill="#6B46C1"></circle><circle cx="5" cy="15" r="3" fill="#6B46C1"></circle><circle cx="15" cy="15" r="3" fill="#1B2B4B"></circle></svg>
+      <span>peaktify</span>
+    </div>
+    <span class="concept">Concept prototype — Scope Handshake (not a Peaktify release)</span>
+    <span class="sht" style="margin-left:auto">S8 · Summary</span>
+  </header>
+    <nav class="tour" aria-label="Screen navigation"><span class="tl">Screen 8 of 8</span><a class="tb back" href="PChat.dc.html">← Ask P</a><a class="tb next" href="Main.dc.html">Start again ↺</a></nav>
+
+  <div class="body">
+    <div class="col" style="gap:12px">
+      <div class="row" style="gap:10px"><span class="new">NEW · Scope Handshake</span><span class="eyebrow">End of the tour</span></div>
+      <div class="row" style="gap:18px">
+        <svg width="64" height="38" viewBox="0 0 64 38" aria-hidden="true"><path d="M30 5a14 14 0 000 28z" fill="#1B2B4B"></path><path d="M34 5a14 14 0 010 28z" fill="#6B46C1"></path></svg>
+        <h1 style="font-size:32px;flex:1 1 360px;min-width:0">The Atlas case, solved</h1>
+      </div>
+      <p style="margin:0;font-size:15.5px;max-width:800px">Every problem the case brief describes, and where Scope Handshake handles it. Each row opens the screen it happens on.</p>
+    </div>
+
+    <div class="row" style="gap:14px;align-items:stretch">
+      <div class="qbox" style="flex:1 1 300px;min-width:0"><span class="q">“What did we actually sell?”</span><span class="muted" style="font-size:12.5px">From the case · answered on screens 2 and 7</span></div>
+      <div class="qbox" style="flex:1 1 300px;min-width:0"><span class="q">“Why is this suddenly being treated as additional scope?”</span><span class="muted" style="font-size:12.5px">From the case · answered on screens 5 and 6</span></div>
+    </div>
+
+    <div class="tbl">
+      <div class="thead"><span class="c1">Atlas problem (from the case)</span><span class="c2">How Scope Handshake handles it</span><span class="c3">Screen</span></div>
+      <a class="trow" href="PromiseList.dc.html"><span class="c1">No link between customer statement → assumption → scope → estimate</span><span class="c2">Locked promise list with sources and the priced line behind every promise</span><span class="c3"><span class="scr">2 · Promise list</span></span></a>
+      <a class="trow" href="PromiseList.dc.html"><span class="c1">Vague pre-sales promises</span><span class="c2">Vague-promise flags, clarified or consciously accepted as risk before locking</span><span class="c3"><span class="scr">2 · Promise list</span></span></a>
+      <a class="trow" href="PromiseList.dc.html"><span class="c1">“Emergency purchases work differently” never priced</span><span class="c2">Flagged as a possible gap at handover, carried through to the Sold vs Found list</span><span class="c3"><span class="scr">2 &amp; 4</span></span></a>
+      <a class="trow" href="Decisions.dc.html"><span class="c1">Different rules in Entities A–D</span><span class="c2">Legal-entity tags and local-exception flags on every finding</span><span class="c3"><span class="scr">4 · Sold vs Found</span></span></a>
+      <a class="trow" href="FindingDetail.dc.html#f02"><span class="c1">Inconsistent Fit/Gap; some conclusions are really assumptions</span><span class="c2">Technical label + “How do we know?” + consultant confirmation, with the basis on record</span><span class="c3"><span class="scr">5 · Finding</span></span></a>
+      <a class="trow" href="FindingDetail.dc.html#f04"><span class="c1">Consultants and architect waiting on each other</span><span class="c2">Fixed order: the expert confirms, then the Delivery Lead decides — Step 2 stays locked until then</span><span class="c3"><span class="scr">5 · Finding</span></span></a>
+      <a class="trow" href="PChat.dc.html"><span class="c1">“What did we actually sell?”</span><span class="c2">P answers in seconds, with the evidence and the promise version attached</span><span class="c3"><span class="scr">7 · Ask P</span></span></a>
+      <a class="trow" href="ChangeRequest.dc.html"><span class="c1">“Why is this suddenly additional scope?”</span><span class="c2">Change-request pack: what was sold, what was found, both sources, human-entered effort</span><span class="c3"><span class="scr">6 · Change request</span></span></a>
+      <a class="trow" href="Decisions.dc.html"><span class="c1">Mandatory vs historical practice debate</span><span class="c2">“Must-have or habit?” plus a drafted question to the customer, with the clock paused</span><span class="c3"><span class="scr">4 · Sold vs Found</span></span></a>
+      <a class="trow" href="FindingDetail.dc.html#f08"><span class="c1">Decisions not linked to their origin</span><span class="c2">Full history on every finding, AI corrections kept, and re-check when a promise changes</span><span class="c3"><span class="scr">5 &amp; 2</span></span></a>
+    </div>
+
+    <div class="col" style="gap:14px;background:#fff;border-radius:14px;padding:22px 24px;border:1.5px dashed #C9B8F2">
+      <div class="row" style="justify-content:space-between">
+        <div class="row" style="gap:10px"><h2 style="font-size:21px">Lessons for Pre-Sales</h2><span class="new">Future · Release 3</span></div>
+        <span class="muted" style="font-size:12.5px">Fixes the cause, not only this project</span>
+      </div>
+      <p style="margin:0;font-size:14.5px;max-width:860px">At the end of Discovery, AI turns what Atlas taught us into suggestions for the next proposal. Pre-Sales reviews them before anything changes in the estimate template.</p>
+      <div class="tbl">
+        <div class="thead"><span class="c1">What Atlas showed</span><span class="c2">Suggested change for the next proposal</span><span class="c3">Evidence</span></div>
+        <div class="trow"><span class="c1">Approvals were priced as one design for 4 companies; two companies needed their own rules</span><span class="c2">Ask in pre-sales: “Are approval rules the same in every company?” Add an “approval variant per entity” line to the estimate template</span><span class="c3"><span class="scr">F-02 · F-05</span></span></div>
+        <div class="trow"><span class="c1">An estimate line was priced at 0 days without a written reason</span><span class="c2">Every 0-day line needs a reason before the promise list can be locked</span><span class="c3"><span class="scr">F-01</span></span></div>
+        <div class="trow"><span class="c1">A customer statement had no promise behind it (“Emergency purchases work differently.”)</span><span class="c2">Possible gaps must be closed (priced or excluded in writing) before the proposal is signed</span><span class="c3"><span class="scr">F-04</span></span></div>
+      </div>
+      <div class="row" style="gap:12px;background:#FAF8FF;border-radius:10px;padding:12px 14px">
+        <span style="font-size:13.5px;flex:1 1 400px;min-width:0"><b>Across projects:</b> once several projects use Scope Handshake, P can spot repeat patterns, for example “approval variants were under-priced in most multi-company deals”, and show them to Pre-Sales while they write the next estimate.</span>
+        <span class="muted" style="font-size:12px">Illustrative · needs data from several projects</span>
+      </div>
+    </div>
+
+    <div class="closing">
+      <svg width="56" height="32" viewBox="0 0 56 32" aria-hidden="true"><path d="M26 4a12 12 0 000 24z" fill="#fff"></path><path d="M30 4a12 12 0 010 24z" fill="#C9B8F2"></path></svg>
+      <b style="font-size:19px;flex:1 1 320px;min-width:0">AI reads, compares and drafts. People confirm, decide and send.</b>
+      <a class="btn ghost" href="Main.dc.html">Back to the work cycle</a>
+    </div>
+
+    <p class="foot" style="text-align:center;margin:8px 0 0">Findings and customer quotes come from the case brief; names, day counts and file names are illustrative.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

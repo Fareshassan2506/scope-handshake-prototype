@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Work cycle — Procurement Discovery Sprint 02</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.5;color:#141821;background:#F6F7F9;-webkit-font-smoothing:antialiased}
+a{color:#1B2B4B;text-decoration:none}
+a:hover{color:#0E1A33}
+h1,h2,h3,h4{font-family:'Space Grotesk',ui-sans-serif,sans-serif;font-weight:500;margin:0;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+.app{display:flex;flex-wrap:wrap;min-height:100vh;align-items:flex-start}
+.side{width:240px;flex:0 0 240px;background:#fff;border-right:1px solid #E4E7EC;padding:20px 14px 28px;align-self:stretch}
+.main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column}
+.wm{display:flex;align-items:center;gap:9px;padding:4px 8px 22px}
+.wm span{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em;color:#1B2B4B}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a,.nav button{display:flex;align-items:center;gap:10px;min-height:34px;padding:0 10px;border-radius:8px;color:#495363;font-size:13.5px;background:none;border:none;text-align:left;width:100%}
+.nav a:hover,.nav button:hover{background:#F6F7F9;color:#1B2B4B}
+.nav button.on{background:#EEF1F6;color:#1B2B4B;font-weight:600}
+.nav a.sh{color:#5B37AE}
+.nav svg{flex:0 0 16px;color:#8A93A3}
+.nav button.on svg{color:#1B2B4B}
+.nav a.sh svg{color:#6B46C1}
+.divider{height:1px;background:#E4E7EC;margin:12px 6px}
+.top{min-height:64px;background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap}
+.search{flex:1 1 220px;max-width:420px;height:36px;border:1px solid #E4E7EC;border-radius:8px;padding:0 12px;background:#F6F7F9;color:#495363;font:inherit}
+.concept{font-size:11px;color:#5B6472;border:1px dashed #C9CFD9;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.who{display:flex;align-items:center;gap:10px;margin-left:auto}
+.av{width:32px;height:32px;border-radius:999px;background:#1B2B4B;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;flex:0 0 32px}
+.av.s{width:22px;height:22px;flex:0 0 22px;font-size:9px}
+.crumb{background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:9px;padding:11px 24px;color:#5B6472;font-size:13px;flex-wrap:wrap}
+.crumb b{color:#141821;font-weight:500}
+.body{padding:22px 24px 24px;display:flex;flex-direction:column;gap:20px;position:relative}
+.card{background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:20px}
+.pad16{padding:16px}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1px solid #DFE3E8;background:#F1F3F5;color:#434C5A;white-space:nowrap}
+.pill.green{background:#E9F7EF;border-color:#A9DCBF;color:#13603A}
+.pill.red{background:#FDEDEB;border-color:#F0B7B0;color:#9F2318}
+.pill.amber{background:#FFF6E0;border-color:#EFD69B;color:#7A5000}
+.pill.blue{background:#EDF2FF;border-color:#BBCAF7;color:#1C44B8}
+.new{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;letter-spacing:.02em;background:#F0EAFF;border:1px solid #C9B8F2;color:#5B37AE;white-space:nowrap}
+.sht{font-size:11px;font-family:'Space Grotesk',sans-serif;color:#495363;background:#F1F3F5;border:1px solid #DFE3E8;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid #1B2B4B;background:#1B2B4B;color:#fff;font-weight:500;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#13213C}
+.btn.ghost{background:#fff;color:#1B2B4B}
+.btn.ghost:hover{background:#F2F5FA}
+.btn.sm{height:32px;padding:0 12px;font-size:12.5px}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A8494;font-weight:600}
+.muted{color:#5B6472}
+.mono{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
+.foot{font-size:11.5px;color:#7A8494}
+.tourlink{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:#5B37AE;border-bottom:1px solid #CDBDF3;align-self:flex-start}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:14px}
+.toast{position:absolute;top:14px;right:24px;width:380px;max-width:calc(100% - 48px);background:#fff;border:1px solid #F0B7B0;border-left:4px solid #C0362C;border-radius:12px;box-shadow:0 14px 34px rgba(20,24,33,.14);padding:14px 16px;display:flex;gap:11px;z-index:30}
+.toast.grey{border-color:#D7DCE4;border-left-color:#1B2B4B}
+.glow{border:1.5px solid #C9B8F2;box-shadow:0 0 0 4px rgba(107,70,193,.07),0 10px 28px rgba(107,70,193,.10)}
+.area{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:15px 16px;width:100%;text-align:left;color:#141821}
+.area:hover{border-color:#C6CFDD;background:#FCFDFF}
+.ico{width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:#F1F3F5;color:#495363;display:flex;align-items:center;justify-content:center}
+.ico.purple{background:#F4F0FF;color:#6B46C1}
+.ico.amber{background:#FFF6E0;color:#8A5A00}
+.bar{height:6px;border-radius:999px;background:#EEF1F6;overflow:hidden}
+.bar i{display:block;height:100%;background:#1B2B4B}
+.navi{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #E4E7EC;padding-top:14px;margin-top:4px}
+select{font:inherit;height:34px;border:1px solid #E4E7EC;border-radius:8px;padding:0 10px;background:#fff;color:#141821}
+.tour{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:flex-end;gap:8px;background:#fff;border-bottom:1px solid #E4E7EC;padding:8px 24px}
+.tour .tl{font-size:12px;color:#7A8494;margin-right:auto}
+.tour a.tb{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 13px;border-radius:8px;font-size:12.5px;font-weight:500;text-decoration:none;border:1px solid #C6CFDD;color:#1B2B4B;background:#fff}
+.tour a.tb:hover{background:#F2F5FA}
+.tour a.tb.next{background:#1B2B4B;border-color:#1B2B4B;color:#fff}
+.tour a.tb.next:hover{background:#13213C}
+</style>
+</helmet>
+
+<div class="app">
+  <aside class="side">
+    <div class="wm">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="5" cy="5" r="3" fill="#1B2B4B"></circle><circle cx="15" cy="5" r="3" fill="#6B46C1"></circle><circle cx="5" cy="15" r="3" fill="#6B46C1"></circle><circle cx="15" cy="15" r="3" fill="#1B2B4B"></circle></svg>
+      <span>peaktify</span>
+    </div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 7L8 2.5 13.5 7v6.5h-11z"></path><path d="M6.5 13.5v-4h3v4"></path></svg>Home</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 4.5h5l1.2 1.5H14v7.5H2z"></path></svg>Projects</button>
+      <button type="button" class="on" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 11-2.1-4.3"></path><path d="M13.8 2.5v3.2h-3.2"></path></svg>Work Cycles</button>
+      <a class="sh" href="Decisions.dc.html"><svg width="16" height="16" viewBox="0 0 20 16" aria-hidden="true"><path d="M9 2a6 6 0 000 12z" fill="currentColor"></path><path d="M11 2a6 6 0 010 12z" fill="#1B2B4B"></path></svg>Scope Handshake <span class="new" style="margin-left:auto">NEW</span></a>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 9.5l2-6h8l2 6v3.5H2z"></path><path d="M2 9.5h3.5l.8 1.5h3.4l.8-1.5H14"></path></svg>Inbox</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.3" y="3.3" width="11.4" height="10.4" rx="1.5"></rect><path d="M2.3 6.4h11.4M5.6 2v2.6M10.4 2v2.6"></path></svg>Calendar</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 13.5V4l5-2 5 2v9.5"></path><path d="M6.5 13.5V9h3v4.5"></path></svg>Customers</button>
+    </nav>
+    <div class="divider"></div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="6" r="2.4"></circle><path d="M2 13.5c0-2.2 1.8-3.6 4-3.6s4 1.4 4 3.6"></path></svg>Members</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.6 4.8 4.8 1.6-4.8 1.6L8 14.4l-1.6-4.8L1.6 8l4.8-1.6z" fill="none" stroke="currentColor" stroke-width="1.3"></path></svg>Agents</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"></rect><circle cx="8" cy="8" r="2.4"></circle></svg>Private Vault</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8 2l5 2v4c0 3-2.1 5.2-5 6-2.9-.8-5-3-5-6V4z"></path></svg>Security</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="2.2"></circle><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2"></path></svg>Settings</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2v4M10 2v4M4.5 6h7v3.5a3.5 3.5 0 01-7 0zM8 13v1.8"></path></svg>Integrations</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <input class="search" type="search" aria-label="Search" value="Search projects, work cycles, artifacts…">
+      <span class="concept">Concept prototype — Scope Handshake (not a Peaktify release)</span>
+      <div class="who">
+        <span class="muted mono" style="font-size:12.5px">Tuesday, October 20, 2026</span>
+        <span class="av">LH</span>
+        <span class="col" style="line-height:1.25"><b style="font-size:13px">Lina Haddad</b><span class="muted" style="font-size:11.5px">Delivery Lead</span></span>
+      </div>
+    </header>
+    <nav class="tour" aria-label="Screen navigation"><span class="tl">Screen 1 of 8</span><a class="tb next" href="PromiseList.dc.html">Promise list →</a></nav>
+
+    <nav class="crumb">
+      <button type="button" class="muted" style="background:none;border:none;padding:0;font:inherit;color:#1B2B4B" onClick="{{nope}}">← Back</button>
+      <span style="color:#C2C9D4">|</span>
+      <span>Atlas Industrial Group</span>
+      <span>›</span>
+      <button type="button" style="background:none;border:none;padding:0;font:inherit;color:#1B2B4B" onClick="{{nope}}">ATLAS-D365-F&amp;SCM</button>
+      <span>›</span>
+      <b>Procurement: Discovery and Analysis - Sprint 02</b>
+    </nav>
+
+    <div class="body">
+      <sc-if value="{{toast}}" hint-placeholder-val="{{ true }}">
+        <div class="toast" role="status">
+          <span style="color:#C0362C;margin-top:3px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 2.2l5.8 10.6H2.2z"></path><path d="M8 6.3v3.1M8 11.2h.01"></path></svg></span>
+          <div class="col" style="gap:8px;flex:1 1 auto;min-width:0">
+            <div style="font-size:13.5px"><b>Possible conflict:</b> F-01 Supplier portal sync vs promise P4. Decision needed.</div>
+            <div class="row" style="gap:8px">
+              <a class="btn sm" href="FindingDetail.dc.html#f01">Review</a>
+              <button class="btn sm ghost" type="button" onClick="{{hideToast}}">Dismiss</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{note}}" hint-placeholder-val="{{ false }}">
+        <div class="toast grey" role="status">
+          <div class="col" style="gap:3px;flex:1 1 auto;min-width:0"><b style="font-size:13.5px">Not part of this prototype.</b><span class="muted" style="font-size:12.5px">Only the Scope Handshake path is built out.</span></div>
+          <button class="btn sm ghost" type="button" onClick="{{clearNote}}">Close</button>
+        </div>
+      </sc-if>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-start;gap:16px;padding-right:400px">
+        <div class="col" style="gap:8px">
+          <div class="row" style="gap:10px">
+            <span class="eyebrow">Work cycle</span>
+            <span class="pill blue">In Progress</span>
+          </div>
+          <h1 style="font-size:27px">Procurement: Discovery and Analysis – Sprint 02</h1>
+          <div class="muted" style="font-size:13px">Oct 12 – Oct 23, 2026 · Fixed Fee · Agile, 2-week work cycles</div>
+        </div>
+        <div class="row" style="gap:8px">
+          <span class="sht">S1 · Oct 20 · 09:45</span>
+          <button class="btn sm ghost" type="button" onClick="{{nope}}">Edit</button>
+        </div>
+      </div>
+
+      <a class="card glow" href="Decisions.dc.html" style="display:block;padding:0;overflow:hidden">
+        <div style="display:flex;flex-wrap:wrap;gap:20px;padding:20px;align-items:center">
+          <div class="ico purple" style="width:56px;height:56px;flex:0 0 56px;border-radius:14px">
+            <svg width="56" height="32" viewBox="0 0 56 32" aria-hidden="true">
+              <path d="M26 4a12 12 0 000 24z" fill="#1B2B4B"></path>
+              <path d="M30 4a12 12 0 010 24z" fill="#6B46C1"></path>
+            </svg>
+          </div>
+          <div class="col" style="gap:6px;flex:1 1 300px;min-width:0">
+            <div class="row" style="gap:9px">
+              <h2 style="font-size:19px">Sold vs Found</h2>
+              <span class="new"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.3 4.7L12 6l-4.7 1.3L6 12 4.7 7.3 0 6l4.7-1.3z" fill="currentColor"></path></svg>NEW · Scope Handshake</span>
+            </div>
+            <span class="mono" style="font-size:14px"><b style="color:#9F2318">1 conflict</b> · <b style="color:#7A5000">3 need your decision</b> · 9 findings</span>
+          </div>
+          <span class="btn sm">Open →</span>
+        </div>
+        <div style="display:flex;height:6px">
+          <i style="flex:3;background:#2E8B57"></i><i style="flex:1;background:#2563EB"></i><i style="flex:2;background:#D98A00"></i><i style="flex:1;background:#C0362C"></i><i style="flex:2;background:#98A2B3"></i>
+        </div>
+      </a>
+
+      <div class="card" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;background:#FCFAFF;border:none">
+        <span class="ico purple" style="width:40px;height:40px;flex:0 0 40px"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.6 4.8 4.8 1.6-4.8 1.6L8 14.4l-1.6-4.8L1.6 8l4.8-1.6z" fill="none" stroke="currentColor" stroke-width="1.3"></path></svg></span>
+        <div class="col" style="gap:3px;flex:1 1 280px;min-width:0">
+          <div class="row" style="gap:8px"><b>BA Agent</b><span class="pill green">Active</span></div>
+          <span class="muted" style="font-size:13px">Discovery &amp; Analysis Agent</span>
+        </div>
+        <button class="btn sm ghost" type="button" onClick="{{nope}}">Chat with Agent ›</button>
+      </div>
+
+      <div class="grid4">
+        <div class="card pad16 col" style="gap:5px"><span class="eyebrow">Timeline</span><b class="mono" style="font-size:15px">Oct 12 – Oct 23, 2026</b><span class="muted" style="font-size:12.5px">Day 7 of 10 working days</span></div>
+        <div class="card pad16 col" style="gap:5px"><span class="eyebrow">Owner</span><div class="row" style="gap:8px"><span class="av s">LH</span><b style="font-size:14px">Lina Haddad</b></div><span class="muted" style="font-size:12.5px">Delivery Lead</span></div>
+        <div class="card pad16 col" style="gap:5px"><span class="eyebrow">Deliverable</span><b style="font-size:15px">BRD — Procurement</b><span class="muted" style="font-size:12.5px">Draft · due Oct 23</span></div>
+        <div class="card pad16 col" style="gap:5px"><span class="eyebrow">Template</span><b style="font-size:15px">D365 F&amp;SCM Discovery</b><span class="muted" style="font-size:12.5px">v4 · standard</span></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card col" style="gap:12px">
+          <span class="eyebrow">Goal</span>
+          <p style="margin:0;font-size:14.5px">Confirm the Source-to-Pay process across Entity A–D, capture entity-level exceptions, and produce a signed-off BRD for the Procurement workstream.</p>
+          <div class="row" style="gap:10px">
+            <label class="muted" style="font-size:12.5px" for="st">Status</label>
+            <select id="st" aria-label="Work cycle status" onChange="{{nope}}">
+              <option>On track — scope review pending</option>
+              <option>At risk</option>
+              <option>Blocked</option>
+            </select>
+          </div>
+        </div>
+        <div class="col" style="gap:14px">
+          <div class="card pad16 col" style="gap:9px">
+            <div class="row" style="justify-content:space-between"><span class="eyebrow">Assets processed</span><b class="mono">100% · 64 of 64</b></div>
+            <div class="bar"><i style="width:100%"></i></div>
+          </div>
+          <div class="row" style="gap:14px">
+            <div class="card pad16 col" style="gap:4px;flex:1 1 150px"><span class="eyebrow">Workshops completed</span><b class="mono" style="font-size:22px">7</b></div>
+            <div class="card pad16 col" style="gap:4px;flex:1 1 150px"><span class="eyebrow">Last updated</span><b class="mono" style="font-size:15px">Oct 20, 2026</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" style="gap:12px">
+        <span class="eyebrow">Related areas</span>
+        <div class="grid3">
+          <button class="area" type="button" onClick="{{nope}}"><span class="ico"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3.5 2.5h6L12.5 5.5v8h-9z"></path><path d="M9 2.5v3.2h3.4"></path></svg></span><span class="col"><b>Artifacts</b><span class="muted" style="font-size:12.5px">64 processed</span></span></button>
+          <button class="area" type="button" onClick="{{nope}}"><span class="ico"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="5.3" cy="5.5" r="2"></circle><circle cx="10.7" cy="5.5" r="2"></circle><path d="M2 13c0-1.9 1.5-3.1 3.3-3.1S8.6 11.1 8.6 13M8.4 13c0-1.9 1.5-3.1 3.3-3.1S14 11.1 14 13"></path></svg></span><span class="col"><b>Workshops</b><span class="muted" style="font-size:12.5px">7 of 7 complete</span></span></button>
+          <button class="area" type="button" onClick="{{nope}}"><span class="ico"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"></rect><path d="M5.3 8.2l1.9 1.9 3.5-4"></path></svg></span><span class="col"><b>Deliverables</b><span class="muted" style="font-size:12.5px">BRD in draft</span></span></button>
+          <a class="area" href="FollowUps.dc.html" style="border-color:#EFD69B;background:#FFFDF6"><span class="ico amber"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2.4l5.6 10.2H2.4z"></path><path d="M8 6.2v3.1M8 11h.01"></path></svg></span><span class="col"><b>Follow-ups &amp; Exceptions</b><span class="muted" style="font-size:12.5px">6 out of scope · 39 open · <b style="color:#5B37AE">9 sold vs found</b></span></span></a>
+          <button class="area" type="button" onClick="{{nope}}"><span class="ico"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="5.4" r="2.3"></circle><path d="M3 13.6c0-2.4 2.2-4 5-4s5 1.6 5 4"></path></svg></span><span class="col"><b>Stakeholders</b><span class="muted" style="font-size:12.5px">11 mapped</span></span></button>
+          <button class="area" type="button" onClick="{{nope}}"><span class="ico"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"></rect><circle cx="8" cy="8" r="2.3"></circle></svg></span><span class="col"><b>Private Vault</b><span class="muted" style="font-size:12.5px">3 past deliverables</span></span></button>
+        </div>
+      </div>
+
+      <p class="foot" style="text-align:center;margin:8px 0 0">Findings and customer quotes come from the case brief; names, day counts and file names are illustrative.</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1620}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { toast: true, note: false };
+  }
+  renderVals() {
+    return {
+      toast: this.state.toast,
+      note: this.state.note,
+      hideToast: () => this.setState({ toast: false }),
+      nope: () => this.setState({ note: true, toast: false }),
+      clearNote: () => this.setState({ note: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

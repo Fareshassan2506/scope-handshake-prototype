@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Promise list</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.5;color:#141821;background:#F6F7F9;-webkit-font-smoothing:antialiased}
+a{color:#1B2B4B;text-decoration:none}
+a:hover{color:#0E1A33}
+h1,h2,h3,h4{font-family:'Space Grotesk',ui-sans-serif,sans-serif;font-weight:500;margin:0;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+.app{display:flex;flex-wrap:wrap;min-height:100vh;align-items:flex-start}
+.side{width:240px;flex:0 0 240px;background:#fff;border-right:1px solid #E4E7EC;padding:20px 14px 28px;align-self:stretch}
+.main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column}
+.wm{display:flex;align-items:center;gap:9px;padding:4px 8px 22px}
+.wm span{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em;color:#1B2B4B}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a,.nav button{display:flex;align-items:center;gap:10px;min-height:34px;padding:0 10px;border-radius:8px;color:#495363;font-size:13.5px;background:none;border:none;text-align:left;width:100%}
+.nav a:hover,.nav button:hover{background:#F6F7F9;color:#1B2B4B}
+.nav a.sh{color:#5B37AE}
+.nav svg{flex:0 0 16px;color:#8A93A3}
+.nav a.sh svg{color:#6B46C1}
+.divider{height:1px;background:#E4E7EC;margin:12px 6px}
+.top{min-height:64px;background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap}
+.search{flex:1 1 220px;max-width:420px;height:36px;border:1px solid #E4E7EC;border-radius:8px;padding:0 12px;background:#F6F7F9;color:#495363;font:inherit}
+.concept{font-size:11px;color:#5B6472;border:1px dashed #C9CFD9;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.who{display:flex;align-items:center;gap:10px;margin-left:auto}
+.av{width:32px;height:32px;border-radius:999px;background:#1B2B4B;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;flex:0 0 32px}
+.av.p{background:#6B46C1}
+.av.s{width:22px;height:22px;flex:0 0 22px;font-size:9px}
+.crumb{background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:9px;padding:11px 24px;color:#5B6472;font-size:13px;flex-wrap:wrap}
+.crumb b{color:#141821;font-weight:500}
+.crumb button{background:none;border:none;padding:0;font:inherit;color:#1B2B4B}
+.body{padding:18px 24px 24px;display:flex;flex-direction:column;gap:22px;position:relative}
+.card{background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:20px}
+.soft{background:#fff;border-radius:12px;padding:18px 20px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1px solid #DFE3E8;background:#F1F3F5;color:#434C5A;white-space:nowrap}
+.pill.green{background:#E9F7EF;border-color:#A9DCBF;color:#13603A}
+.pill.red{background:#FDEDEB;border-color:#F0B7B0;color:#9F2318}
+.pill.amber{background:#FFF6E0;border-color:#EFD69B;color:#7A5000}
+.pill.navy{background:#EEF1F6;border-color:#C6CFDD;color:#1B2B4B}
+.pill.purple{background:#F4F0FF;border-color:#CDBDF3;color:#5B37AE}
+.new{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;background:#F0EAFF;border:1px solid #C9B8F2;color:#5B37AE;white-space:nowrap}
+.sht{font-size:11px;font-family:'Space Grotesk',sans-serif;color:#495363;background:#F1F3F5;border:1px solid #DFE3E8;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid #1B2B4B;background:#1B2B4B;color:#fff;font-weight:500;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#13213C}
+.btn.ghost{background:#fff;color:#1B2B4B}
+.btn.ghost:hover{background:#F2F5FA}
+.btn.sm{height:32px;padding:0 12px;font-size:12.5px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A8494;font-weight:600}
+.muted{color:#5B6472}
+.mono{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
+.foot{font-size:11.5px;color:#7A8494}
+.stepper{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:8px}
+.stepper a{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:13px;color:#5B6472}
+.stepper a:hover{background:#F6F7F9}
+.stepper a.on{background:#1B2B4B;color:#fff;font-weight:500}
+.stepper a.on .num{background:rgba(255,255,255,.22);color:#fff}
+.num{width:20px;height:20px;border-radius:999px;background:#EEF1F6;color:#495363;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600}
+.sep{display:flex;align-items:center;color:#C2C9D4}
+.about{background:none;border:none;padding:0;font-size:12.5px;color:#5B6472;display:inline-flex;align-items:center;gap:6px;align-self:flex-start}
+.about:hover{color:#1B2B4B}
+.aboutbox{font-size:13px;color:#434C5A;background:#fff;border-radius:10px;padding:11px 14px;max-width:760px}
+.cols{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+.rail{flex:0 1 300px;min-width:260px;display:flex;flex-direction:column;gap:16px}
+.list{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.prow{display:flex;align-items:center;gap:12px;background:#fff;border-radius:10px;padding:12px 16px;width:100%;text-align:left;border:none;color:#141821}
+.prow:hover{background:#FCFDFF}
+.pid{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:#1B2B4B;background:#EEF1F6;border-radius:6px;padding:2px 8px;flex:0 0 auto}
+.ptext{flex:1 1 300px;min-width:0;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src{border-left:3px solid #C9B8F2;background:#FAF8FF;padding:10px 14px;border-radius:0 8px 8px 0;margin:0 16px 12px 16px}
+.src .lbl{font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.09em;font-weight:600;color:#5B37AE;text-transform:uppercase}
+.src .q{display:block;font-style:italic;color:#2C3444;margin:5px 0 5px}
+.src .ref{font-family:'Space Grotesk',sans-serif;font-size:11px;color:#5B6472}
+.pcard{background:#fff;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.meta{font-size:12.5px;color:#5B6472;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.meta button{background:none;border:none;padding:0;font:inherit;font-size:12.5px;color:#5B37AE;border-bottom:1px solid #CDBDF3}
+.warnbox{background:#FFFBEF;border-radius:10px;padding:13px 15px}
+.redbox{background:#FEF5F3;border-radius:12px;padding:16px 18px}
+.okbox{background:#F3FBF6;border-radius:10px;padding:13px 15px}
+.two{display:flex;gap:12px;flex-wrap:wrap}
+.sig{flex:1 1 240px;min-width:0;background:#fff;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.dots{width:30px;height:30px;border-radius:8px;border:1px solid #E4E7EC;background:#fff;color:#5B6472;display:flex;align-items:center;justify-content:center;flex:0 0 30px;position:relative}
+.menu{position:absolute;top:34px;right:0;background:#fff;border:1px solid #E4E7EC;border-radius:10px;box-shadow:0 12px 30px rgba(20,24,33,.14);display:flex;flex-direction:column;min-width:140px;z-index:20;padding:5px}
+.menu button{background:none;border:none;text-align:left;padding:8px 11px;border-radius:7px;font-size:13px;color:#141821}
+.menu button:hover{background:#F6F7F9}
+textarea,input[type=text]{font:inherit;border:1px solid #D7DCE4;border-radius:9px;padding:10px 12px;resize:vertical;color:#141821;width:100%}
+textarea{min-height:76px}
+input[type=text]{height:38px;padding:0 12px}
+.choice{display:flex;gap:10px;flex-wrap:wrap}
+.ch{flex:1 1 220px;min-width:0;border:1.5px solid #E4E7EC;border-radius:10px;padding:11px 13px;background:#fff;text-align:left;color:#141821;display:flex;flex-direction:column;gap:3px}
+.ch.on{border-color:#1B2B4B;background:#F4F7FC}
+.seal{display:flex;align-items:center;gap:12px;background:#F3FBF6;border-radius:12px;padding:14px 18px}
+.mw{position:absolute;inset:0;background:rgba(20,24,33,.42);display:flex;justify-content:center;align-items:flex-start;padding:150px 24px 24px;z-index:50}
+.modal{width:540px;max-width:100%;background:#fff;border-radius:14px;box-shadow:0 26px 60px rgba(20,24,33,.3);padding:24px;display:flex;flex-direction:column;gap:16px}
+.toast{position:absolute;top:14px;right:24px;width:380px;max-width:calc(100% - 48px);background:#fff;border:1px solid #D7DCE4;border-left:4px solid #1B2B4B;border-radius:12px;box-shadow:0 14px 34px rgba(20,24,33,.14);padding:14px 16px;display:flex;gap:11px;z-index:60}
+.toast.amber{border-left-color:#D98A00}
+.vbox{display:flex;flex-wrap:wrap;gap:12px}
+.vcard{flex:1 1 260px;min-width:0;border-radius:11px;padding:13px 15px;display:flex;flex-direction:column;gap:7px}
+.vcard.old{background:#F4F6F9}
+.vcard.cur{background:#F3FBF6}
+.navi{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #E4E7EC;padding-top:14px}
+.tour{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:flex-end;gap:8px;background:#fff;border-bottom:1px solid #E4E7EC;padding:8px 24px}
+.tour .tl{font-size:12px;color:#7A8494;margin-right:auto}
+.tour a.tb{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 13px;border-radius:8px;font-size:12.5px;font-weight:500;text-decoration:none;border:1px solid #C6CFDD;color:#1B2B4B;background:#fff}
+.tour a.tb:hover{background:#F2F5FA}
+.tour a.tb.next{background:#1B2B4B;border-color:#1B2B4B;color:#fff}
+.tour a.tb.next:hover{background:#13213C}
+</style>
+</helmet>
+
+<div class="app">
+  <aside class="side">
+    <div class="wm">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="5" cy="5" r="3" fill="#1B2B4B"></circle><circle cx="15" cy="5" r="3" fill="#6B46C1"></circle><circle cx="5" cy="15" r="3" fill="#6B46C1"></circle><circle cx="15" cy="15" r="3" fill="#1B2B4B"></circle></svg>
+      <span>peaktify</span>
+    </div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 7L8 2.5 13.5 7v6.5h-11z"></path><path d="M6.5 13.5v-4h3v4"></path></svg>Home</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 4.5h5l1.2 1.5H14v7.5H2z"></path></svg>Projects</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 11-2.1-4.3"></path><path d="M13.8 2.5v3.2h-3.2"></path></svg>Work Cycles</button>
+      <a class="sh" href="Decisions.dc.html"><svg width="16" height="16" viewBox="0 0 20 16" aria-hidden="true"><path d="M9 2a6 6 0 000 12z" fill="currentColor"></path><path d="M11 2a6 6 0 010 12z" fill="#1B2B4B"></path></svg>Scope Handshake <span class="new" style="margin-left:auto">NEW</span></a>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 9.5l2-6h8l2 6v3.5H2z"></path></svg>Inbox</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.3" y="3.3" width="11.4" height="10.4" rx="1.5"></rect></svg>Calendar</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 13.5V4l5-2 5 2v9.5"></path></svg>Customers</button>
+    </nav>
+    <div class="divider"></div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="6" r="2.4"></circle><path d="M2 13.5c0-2.2 1.8-3.6 4-3.6s4 1.4 4 3.6"></path></svg>Members</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.6 4.8 4.8 1.6-4.8 1.6L8 14.4l-1.6-4.8L1.6 8l4.8-1.6z" fill="none" stroke="currentColor" stroke-width="1.3"></path></svg>Agents</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"></rect><circle cx="8" cy="8" r="2.4"></circle></svg>Private Vault</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8 2l5 2v4c0 3-2.1 5.2-5 6-2.9-.8-5-3-5-6V4z"></path></svg>Security</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="2.2"></circle><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2"></path></svg>Settings</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2v4M10 2v4M4.5 6h7v3.5a3.5 3.5 0 01-7 0zM8 13v1.8"></path></svg>Integrations</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <input class="search" type="search" aria-label="Search" value="Search projects, work cycles, artifacts…">
+      <span class="concept">Concept prototype — Scope Handshake (not a Peaktify release)</span>
+      <div class="who">
+        <span class="muted mono" style="font-size:12.5px">Thursday, October 1, 2026</span>
+        <span class="av">LH</span>
+        <span class="col" style="line-height:1.25"><b style="font-size:13px">Lina Haddad</b><span class="muted" style="font-size:11.5px">Delivery Lead</span></span>
+      </div>
+    </header>
+    <nav class="tour" aria-label="Screen navigation"><span class="tl">Screen 2 of 8</span><a class="tb back" href="Main.dc.html">← Work cycle</a><a class="tb next" href="FollowUps.dc.html">Follow-ups heads-up →</a></nav>
+
+    <nav class="crumb">
+      <a href="Main.dc.html">← Back</a>
+      <span style="color:#C2C9D4">|</span>
+      <span>Atlas Industrial Group</span>
+      <span>›</span>
+      <a href="Main.dc.html">ATLAS-D365-F&amp;SCM</a>
+      <span>›</span>
+      <b>Promise list</b>
+    </nav>
+
+    <div class="body">
+      <sc-if value="{{note}}" hint-placeholder-val="{{ false }}">
+        <div class="toast" role="status">
+          <div class="col" style="gap:3px;flex:1 1 auto;min-width:0"><b style="font-size:13.5px">Not part of this prototype.</b><span class="muted" style="font-size:12.5px">Only the Scope Handshake path is built out.</span></div>
+          <button class="btn sm ghost" type="button" onClick="{{clearNote}}">Close</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{rcToast}}" hint-placeholder-val="{{ false }}">
+        <div class="toast amber" role="status">
+          <div class="col" style="gap:8px;flex:1 1 auto;min-width:0">
+            <b style="font-size:13.5px">2 decisions flagged for re-check: F-02, F-05</b>
+            <span class="muted" style="font-size:12.5px">Re-check means the Delivery Lead reviews the decision again; it is not automatically reversed.</span>
+            <div class="row" style="gap:8px"><a class="btn sm" href="Decisions.dc.html#recheck">View</a><button class="btn sm ghost" type="button" onClick="{{hideRc}}">Dismiss</button></div>
+          </div>
+        </div>
+      </sc-if>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="stepper" role="navigation" aria-label="Scope Handshake story">
+          <a class="on" href="PromiseList.dc.html"><span class="num">1</span>Promise</a>
+          <span class="sep">→</span>
+          <a href="Decisions.dc.html"><span class="num">2</span>Found</a>
+          <span class="sep">→</span>
+          <a href="FindingDetail.dc.html#step1"><span class="num">3</span>Check</a>
+          <span class="sep">→</span>
+          <a href="FindingDetail.dc.html#step2"><span class="num">4</span>Decide</a>
+          <span class="sep">→</span>
+          <a href="ChangeRequest.dc.html"><span class="num">5</span>Act</a>
+        </div>
+        <span class="sht">S2 · Oct 1 · handover</span>
+      </div>
+
+      <button class="about" type="button" onClick="{{toggleAbout}}">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.2"></circle><path d="M8 7.2v4M8 5h.01"></path></svg>
+        About this screen
+      </button>
+      <sc-if value="{{about}}" hint-placeholder-val="{{ false }}">
+        <div class="aboutbox">At handover, AI reads the proposal, the estimate and the pre-sales notes and writes down what was promised. Vague promises are clarified or consciously accepted, then the list is locked as the baseline every finding is compared against.</div>
+      </sc-if>
+
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div class="col" style="gap:6px">
+          <div class="row" style="gap:12px">
+            <h1 style="font-size:27px">Promise list</h1>
+            <sc-if value="{{draft}}" hint-placeholder-val="{{ true }}"><span class="pill amber">v1 · Draft</span></sc-if>
+            <sc-if value="{{lockedOnly}}" hint-placeholder-val="{{ false }}"><span class="pill green">v1 · Locked</span></sc-if>
+            <sc-if value="{{v2}}" hint-placeholder-val="{{ false }}"><span class="pill green">v2 · Approved</span></sc-if>
+            <span class="new"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.3 4.7L12 6l-4.7 1.3L6 12 4.7 7.3 0 6l4.7-1.3z" fill="currentColor"></path></svg>NEW · Scope Handshake</span>
+          </div>
+          <span class="muted">What was promised and assumed in the price · 6 promises</span>
+        </div>
+      </div>
+
+      <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+        <div class="seal">
+          <span style="color:#13603A"><svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.6"></rect><path d="M5.5 7V5a2.5 2.5 0 015 0v2"></path></svg></span>
+          <div class="col" style="gap:2px;flex:1 1 300px;min-width:0">
+            <b>v1 · Locked by Lina Haddad · Oct 1, 2026</b>
+            <span class="muted" style="font-size:13px">The official baseline. Every Discovery finding is compared against it.</span>
+          </div>
+          <a class="btn sm ghost" href="Decisions.dc.html">See findings ›</a>
+        </div>
+      </sc-if>
+
+      <div class="cols">
+        <div class="list">
+
+          <div class="pcard">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <div class="row" style="gap:9px"><span class="pid">P1</span><span class="pill green">Clear</span></div>
+              <span class="muted" style="font-size:12px">No open questions</span>
+            </div>
+            <p style="margin:0;font-size:15.5px;font-weight:600">Source-to-Pay will primarily use standard D365 capabilities: requisitions, approval workflows, purchase orders, receiving, vendor invoicing and standard financial controls.</p>
+            <div class="meta">Commitment · General · Source: Proposal §3.2 p.4</div>
+            <div class="src" style="margin:0"><span class="lbl">Source excerpt</span><span class="q">“The Source-to-Pay process will primarily leverage standard Dynamics 365 capabilities…”</span><span class="ref">[Proposal_Atlas_v3.pdf · §3.2 · p.4]</span></div>
+          </div>
+
+          <div class="pcard">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <div class="row" style="gap:9px"><span class="pid">P2</span><span class="pill {{f2.tagCls}}">{{f2.tag}}</span></div>
+              <div class="dots" style="cursor:pointer" onClick="{{m2.toggle}}">⋯
+                <sc-if value="{{m2.open}}" hint-placeholder-val="{{ false }}"><div class="menu"><button type="button" onClick="{{nope}}">Edit</button><button type="button" onClick="{{nope}}">Merge</button><button type="button" onClick="{{nope}}">Delete</button></div></sc-if>
+              </div>
+            </div>
+            <p style="margin:0;font-size:15.5px;font-weight:600">A largely common procurement process will be used across the four legal entities.</p>
+            <div class="meta">Assumption · Procurement · <button type="button" onClick="{{s2.toggle}}">Source: Proposal §3.1 p.3</button></div>
+            <sc-if value="{{s2.open}}" hint-placeholder-val="{{ false }}">
+              <div class="src" style="margin:0"><span class="lbl">Source excerpt</span><span class="q">“A largely common procurement process will be adopted across the four legal entities.”</span><span class="ref">[Proposal_Atlas_v3.pdf · §3.1 · p.3]</span></div>
+            </sc-if>
+            <sc-if value="{{f2.open}}" hint-placeholder-val="{{ true }}">
+              <div class="warnbox col" style="gap:11px">
+                <b style="font-size:13.5px;color:#7A5000">The customer gave two signals</b>
+                <div class="two">
+                  <div class="sig"><span style="font-style:italic;color:#4A3A12">“We want one way of working across the group where possible.”</span><span class="muted" style="font-size:11.5px">Pre-sales meeting 1</span></div>
+                  <div class="sig"><span style="font-style:italic;color:#4A3A12">“Some approvals depend on business unit, spend category and amount.”</span><span class="muted" style="font-size:11.5px">Rania Samir · Pre-sales meeting 2</span></div>
+                </div>
+                <span style="font-size:13px"><b>Sales priced the first signal.</b> The second suggests local variants.</span>
+                <div class="row" style="gap:7px"><button class="btn sm" type="button" onClick="{{f2.clarify}}">Clarify</button><button class="btn sm ghost" type="button" onClick="{{f2.keep}}">Keep as is</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f2.panel}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:12px;background:#FCFAFF;border-radius:10px;padding:14px">
+                <div class="choice">
+                  <button class="ch {{f2.clsRewrite}}" type="button" onClick="{{f2.pickRewrite}}"><b style="font-size:13.5px">A · Rewrite the promise</b><span class="muted" style="font-size:12.5px">Say precisely what is included</span></button>
+                  <button class="ch {{f2.clsAsk}}" type="button" onClick="{{f2.pickAsk}}"><b style="font-size:13.5px">B · Ask the customer</b><span class="muted" style="font-size:12.5px">One question for Karim to send</span></button>
+                </div>
+                <span class="new">AI draft · edit before saving</span>
+                <textarea aria-label="Clarification for P2" value="{{f2.text}}" onChange="{{f2.setText}}"></textarea>
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{f2.save}}">Save</button><button class="btn sm ghost" type="button" onClick="{{f2.cancel}}">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f2.keepPanel}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:10px;background:#FFFBEF;border-radius:10px;padding:14px">
+                <span class="eyebrow">Keep as is — reason required</span>
+                <input type="text" aria-label="Reason for accepting the risk on P2" value="{{f2.reason}}" onChange="{{f2.setReason}}">
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{f2.saveKeep}}" disabled="{{f2.keepDisabled}}">Accept the risk</button><button class="btn sm ghost" type="button" onClick="{{f2.cancel}}">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f2.clarified}}" hint-placeholder-val="{{ false }}"><div class="okbox col" style="gap:5px"><span class="pill green">Clarified · Karim Adel, Oct 1</span><span style="font-size:13.5px">{{f2.text}}</span></div></sc-if>
+            <sc-if value="{{f2.risk}}" hint-placeholder-val="{{ false }}"><div class="warnbox col" style="gap:5px"><span class="pill amber">Risk accepted · Lina Haddad, Oct 1</span><span style="font-size:13.5px">{{f2.reason}}</span></div></sc-if>
+          </div>
+
+          <div class="pcard">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <div class="row" style="gap:9px"><span class="pid">P3</span><span class="pill {{f3.tagCls}}">{{f3.tag}}</span></div>
+              <div class="dots" style="cursor:pointer" onClick="{{m3.toggle}}">⋯
+                <sc-if value="{{m3.open}}" hint-placeholder-val="{{ false }}"><div class="menu"><button type="button" onClick="{{nope}}">Edit</button><button type="button" onClick="{{nope}}">Merge</button><button type="button" onClick="{{nope}}">Delete</button></div></sc-if>
+              </div>
+            </div>
+            <p style="margin:0;font-size:15.5px;font-weight:600">Approvals will use standard configurable approval workflows.</p>
+            <div class="meta">Assumption · Procurement · <button type="button" onClick="{{s3.toggle}}">Source: Estimate assumptions tab</button></div>
+            <sc-if value="{{s3.open}}" hint-placeholder-val="{{ false }}">
+              <div class="src" style="margin:0"><span class="lbl">Source excerpt</span><span class="q">“Approvals: standard configurable approval workflows (no bespoke engine).”</span><span class="ref">[Estimate_Atlas_S2P.xlsx · Assumptions tab]</span></div>
+            </sc-if>
+            <sc-if value="{{f3.open}}" hint-placeholder-val="{{ true }}">
+              <div class="warnbox col" style="gap:9px">
+                <b style="font-size:13.5px;color:#7A5000">The customer said</b>
+                <span style="font-style:italic;color:#4A3A12">“We cannot lose our current approval controls.”</span>
+                <span class="muted" style="font-size:12.5px">David Chen, Group Finance Controller · Pre-sales meeting 1 · How many levels? The same for all four entities?</span>
+                <div class="row" style="gap:7px"><button class="btn sm" type="button" onClick="{{f3.clarify}}">Clarify</button><button class="btn sm ghost" type="button" onClick="{{f3.keep}}">Keep as is</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f3.panel}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:12px;background:#FCFAFF;border-radius:10px;padding:14px">
+                <div class="choice">
+                  <button class="ch {{f3.clsRewrite}}" type="button" onClick="{{f3.pickRewrite}}"><b style="font-size:13.5px">A · Rewrite the promise</b><span class="muted" style="font-size:12.5px">Say precisely what is included</span></button>
+                  <button class="ch {{f3.clsAsk}}" type="button" onClick="{{f3.pickAsk}}"><b style="font-size:13.5px">B · Ask the customer</b><span class="muted" style="font-size:12.5px">One question for Karim to send</span></button>
+                </div>
+                <span class="new">AI draft · edit before saving</span>
+                <textarea aria-label="Clarification for P3" value="{{f3.text}}" onChange="{{f3.setText}}"></textarea>
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{f3.save}}">Save</button><button class="btn sm ghost" type="button" onClick="{{f3.cancel}}">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f3.keepPanel}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:10px;background:#FFFBEF;border-radius:10px;padding:14px">
+                <span class="eyebrow">Keep as is — reason required</span>
+                <input type="text" aria-label="Reason for accepting the risk on P3" value="{{f3.reason}}" onChange="{{f3.setReason}}">
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{f3.saveKeep}}" disabled="{{f3.keepDisabled}}">Accept the risk</button><button class="btn sm ghost" type="button" onClick="{{f3.cancel}}">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f3.clarified}}" hint-placeholder-val="{{ false }}"><div class="okbox col" style="gap:5px"><span class="pill green">Clarified · Karim Adel, Oct 1</span><span style="font-size:13.5px">{{f3.text}}</span></div></sc-if>
+            <sc-if value="{{f3.risk}}" hint-placeholder-val="{{ false }}"><div class="warnbox col" style="gap:5px"><span class="pill amber">Risk accepted · Lina Haddad, Oct 1</span><span style="font-size:13.5px">{{f3.reason}}</span></div></sc-if>
+          </div>
+
+          <div class="pcard">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <div class="row" style="gap:9px"><span class="pid">P4</span><span class="pill {{f4.tagCls}}">{{f4.tag}}</span></div>
+              <div class="dots" style="cursor:pointer" onClick="{{m4.toggle}}">⋯
+                <sc-if value="{{m4.open}}" hint-placeholder-val="{{ false }}"><div class="menu"><button type="button" onClick="{{nope}}">Edit</button><button type="button" onClick="{{nope}}">Merge</button><button type="button" onClick="{{nope}}">Delete</button></div></sc-if>
+              </div>
+            </div>
+            <p style="margin:0;font-size:15.5px;font-weight:600">The existing supplier portal remains outside the scope of Dynamics 365.</p>
+            <div class="meta">Assumption · Procurement · <button type="button" onClick="{{s4.toggle}}">Source: Proposal §5 p.9</button> · priced at 0 days</div>
+            <sc-if value="{{s4.open}}" hint-placeholder-val="{{ false }}">
+              <div class="src" style="margin:0"><span class="lbl">Source excerpt</span><span class="q">“The existing supplier portal remains <b>outside</b> the scope of Dynamics 365.”</span><span class="ref">[Proposal_Atlas_v3.pdf · §5 Assumptions · p.9]</span></div>
+            </sc-if>
+            <sc-if value="{{f4.open}}" hint-placeholder-val="{{ true }}">
+              <div class="warnbox col" style="gap:9px">
+                <b style="font-size:13.5px;color:#7A5000">The customer said</b>
+                <span style="font-style:italic;color:#4A3A12">“Our suppliers should not feel the ERP transition.”</span>
+                <span class="muted" style="font-size:12.5px">Rania Samir, Group Procurement Lead · Pre-sales meeting 3 · may imply synchronization, which the assumption excludes</span>
+                <div class="row" style="gap:7px"><button class="btn sm" type="button" onClick="{{f4.clarify}}">Clarify</button><button class="btn sm ghost" type="button" onClick="{{f4.keep}}">Keep as is</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f4.panel}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:12px;background:#FCFAFF;border-radius:10px;padding:14px">
+                <div class="choice">
+                  <button class="ch {{f4.clsRewrite}}" type="button" onClick="{{f4.pickRewrite}}"><b style="font-size:13.5px">A · Rewrite the promise</b><span class="muted" style="font-size:12.5px">Say precisely what is included</span></button>
+                  <button class="ch {{f4.clsAsk}}" type="button" onClick="{{f4.pickAsk}}"><b style="font-size:13.5px">B · Ask the customer</b><span class="muted" style="font-size:12.5px">One question for Karim to send</span></button>
+                </div>
+                <span class="new">AI draft · edit before saving</span>
+                <textarea aria-label="Clarification for P4" value="{{f4.text}}" onChange="{{f4.setText}}"></textarea>
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{f4.save}}">Save</button><button class="btn sm ghost" type="button" onClick="{{f4.cancel}}">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f4.keepPanel}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:10px;background:#FFFBEF;border-radius:10px;padding:14px">
+                <span class="eyebrow">Keep as is — reason required</span>
+                <input type="text" aria-label="Reason for accepting the risk on P4" value="{{f4.reason}}" onChange="{{f4.setReason}}">
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{f4.saveKeep}}" disabled="{{f4.keepDisabled}}">Accept the risk</button><button class="btn sm ghost" type="button" onClick="{{f4.cancel}}">Cancel</button></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{f4.clarified}}" hint-placeholder-val="{{ false }}"><div class="okbox col" style="gap:5px"><span class="pill green">Clarified · Karim Adel, Oct 1</span><span style="font-size:13.5px">{{f4.text}}</span></div></sc-if>
+            <sc-if value="{{f4.risk}}" hint-placeholder-val="{{ false }}"><div class="warnbox col" style="gap:5px"><span class="pill amber">Risk accepted · Lina Haddad, Oct 1</span><span style="font-size:13.5px">{{f4.reason}}</span></div></sc-if>
+          </div>
+
+          <div class="pcard">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <div class="row" style="gap:9px"><span class="pid">P5</span><span class="pill green">Clear</span></div>
+              <span class="muted" style="font-size:12px">No open questions</span>
+            </div>
+            <p style="margin:0;font-size:15.5px;font-weight:600">Limited customization; no major bespoke procurement application.</p>
+            <div class="meta">Assumption · General · Source: Proposal §5 p.9</div>
+            <div class="src" style="margin:0"><span class="lbl">Source excerpt</span><span class="q">“Customization is limited to minor extensions; no bespoke procurement application is in scope.”</span><span class="ref">[Proposal_Atlas_v3.pdf · §5 · p.9]</span></div>
+          </div>
+
+          <div class="pcard">
+            <div class="row" style="justify-content:space-between;align-items:flex-start">
+              <div class="row" style="gap:9px"><span class="pid">P6</span><span class="pill green">Clear</span></div>
+              <span class="muted" style="font-size:12px">No open questions</span>
+            </div>
+            <p style="margin:0;font-size:15.5px;font-weight:600">Standard financial controls, including budget checking.</p>
+            <div class="meta">Commitment · Finance · Source: Proposal §3.4 p.5</div>
+            <div class="src" style="margin:0"><span class="lbl">Source excerpt</span><span class="q">“Standard financial controls, including budget checking, are included.”</span><span class="ref">[Proposal_Atlas_v3.pdf · §3.4 · p.5]</span></div>
+          </div>
+
+          <div class="redbox col" style="gap:10px">
+            <div class="row" style="gap:9px"><b style="color:#9F2318">Possible gap · please review</b><span class="muted" style="font-size:12.5px">A customer statement with no promise behind it · not priced</span></div>
+            <span style="font-style:italic;font-size:15px">“Emergency purchases work differently.”</span>
+            <span class="muted" style="font-size:12.5px">Pre-sales meeting 2 · meeting notes</span>
+            <sc-if value="{{gapOpen}}" hint-placeholder-val="{{ true }}">
+              <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{addGap}}">Add as promise</button><button class="btn sm ghost" type="button" onClick="{{gapOut}}">Mark as out of scope</button></div>
+            </sc-if>
+            <sc-if value="{{gapDone}}" hint-placeholder-val="{{ false }}"><span class="pill amber">{{gapLabel}}</span></sc-if>
+          </div>
+
+          <div class="col" style="gap:12px;padding-top:10px">
+            <h2 style="font-size:17px">Versions</h2>
+            <sc-if value="{{draft}}" hint-placeholder-val="{{ true }}">
+              <span class="muted" style="font-size:13px">No locked version yet. Lock v1 to create the baseline.</span>
+            </sc-if>
+            <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+              <div class="row" style="gap:9px"><span class="pill green">v1 · Locked Oct 1</span><sc-if value="{{v2}}" hint-placeholder-val="{{ false }}"><span class="pill green">v2 · Approved by Lina Haddad, Oct 20</span></sc-if></div>
+              <div class="soft col" style="gap:12px;border:1.5px dashed #C9B8F2;background:#FCFAFF">
+                <div class="row" style="justify-content:space-between">
+                  <div class="row" style="gap:9px"><span class="av s p">KA</span><b style="font-size:14px">Karim Adel proposes P2 v2</b><span class="muted" style="font-size:12.5px">Oct 20, after Discovery</span></div>
+                  <span class="pill {{propCls}}">{{propStatus}}</span>
+                </div>
+                <div class="vbox">
+                  <div class="vcard old"><span class="eyebrow">Originally sold (v1)</span><span style="font-size:13.5px">A largely common procurement process will be used across the four legal entities.</span></div>
+                  <div class="vcard cur"><span class="eyebrow">Proposed (v2)</span><span style="font-size:13.5px">Common procurement process with <b>up to two approved approval variants per entity</b>.</span></div>
+                </div>
+                <span class="muted" style="font-size:13px">Reason: “Discovery shows two entities need their own conditions. The baseline should say what we will actually deliver, so the next comparison is fair to both sides.”</span>
+                <sc-if value="{{v2pending}}" hint-placeholder-val="{{ true }}">
+                  <div class="row" style="gap:9px"><button class="btn sm" type="button" onClick="{{approveV2}}">Approve as v2</button><button class="btn sm ghost" type="button" onClick="{{nope}}">Request changes</button></div>
+                </sc-if>
+                <sc-if value="{{v2}}" hint-placeholder-val="{{ false }}">
+                  <div class="okbox col" style="gap:4px"><b style="font-size:13.5px">v2 · Approved by Lina Haddad, Oct 20</b><span class="muted" style="font-size:12.5px">Original v1 stays on record. Decisions measured against v1 keep that version; F-02 and F-05 are flagged for re-check — reviewed again, not automatically reversed.</span></div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <aside class="rail">
+          <div class="soft col" style="gap:12px">
+            <span class="eyebrow">Reviewers</span>
+            <div class="row" style="gap:10px"><span class="av s p">KA</span><span class="col" style="line-height:1.3;flex:1 1 auto;min-width:0"><b style="font-size:13px">Karim Adel</b><span class="muted" style="font-size:11.5px">Pre-Sales Lead</span></span><span class="pill green">✓ Reviewed</span></div>
+            <div class="row" style="gap:10px"><span class="av s">LH</span><span class="col" style="line-height:1.3;flex:1 1 auto;min-width:0"><b style="font-size:13px">Lina Haddad</b><span class="muted" style="font-size:11.5px">Delivery Lead</span></span><sc-if value="{{draft}}" hint-placeholder-val="{{ true }}"><span class="pill amber">To lock</span></sc-if><sc-if value="{{locked}}" hint-placeholder-val="{{ false }}"><span class="pill green">Locked v1</span></sc-if></div>
+          </div>
+          <div class="soft col" style="gap:8px">
+            <span class="eyebrow">Price</span>
+            <span style="font-size:13.5px">Priced: <b class="mono">120 days</b> total · <b class="mono">82</b> linked to promises · <b class="mono" style="color:#9F2318">1</b> line priced at 0 days</span>
+            <span class="muted" style="font-size:12px">Visible to the Delivery Lead only.</span>
+          </div>
+          <div class="soft col" style="gap:10px">
+            <sc-if value="{{draft}}" hint-placeholder-val="{{ true }}">
+              <span class="pill {{vagueCls}}">{{vagueLabel}}</span>
+              <button class="btn" type="button" onClick="{{openModal}}" style="width:100%"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.6"></rect><path d="M5.5 7V5a2.5 2.5 0 015 0v2"></path></svg>Lock as v1</button>
+              <span class="muted" style="font-size:12px">After locking, a promise can only change through a new version approved by the Delivery Lead.</span>
+            </sc-if>
+            <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+              <a class="btn ghost" href="Decisions.dc.html" style="width:100%">Go to Sold vs Found ›</a>
+            </sc-if>
+          </div>
+        </aside>
+      </div>
+
+      <p class="foot" style="text-align:center;margin:8px 0 0">Findings and customer quotes come from the case brief; names, day counts and file names are illustrative.</p>
+
+      <sc-if value="{{modal}}" hint-placeholder-val="{{ false }}">
+        <div class="mw" role="dialog" aria-label="Lock promise list as version 1">
+          <div class="modal">
+            <h2 style="font-size:19px">Lock the promise list as v1?</h2>
+            <p style="margin:0" class="muted">Locking creates the official baseline for comparisons. Future changes require a new version and Delivery Lead approval.</p>
+            <sc-if value="{{anyVague}}" hint-placeholder-val="{{ true }}"><div class="warnbox"><b style="font-size:13px;color:#7A5000">{{modalVague}}</b></div></sc-if>
+            <sc-if value="{{noVague}}" hint-placeholder-val="{{ false }}"><div class="okbox"><b style="font-size:13px;color:#13603A">All vague promises are clarified or consciously accepted.</b></div></sc-if>
+            <div class="row" style="justify-content:flex-end;gap:9px">
+              <button class="btn ghost" type="button" onClick="{{closeModal}}">Cancel</button>
+              <button class="btn" type="button" onClick="{{lock}}">{{lockLabel}}</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3020}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      locked: false, modal: false, v2: false, rcToast: false, about: false, note: false, gap: '',
+      x: {}, s: {}, m: {},
+      f: {
+        p2: { status: 'open', panel: false, keepPanel: false, mode: 'rewrite', text: '', reason: '' },
+        p3: { status: 'open', panel: false, keepPanel: false, mode: 'rewrite', text: '', reason: '' },
+        p4: { status: 'open', panel: false, keepPanel: false, mode: 'rewrite', text: '', reason: '' }
+      }
+    };
+  }
+  drafts(id, mode) {
+    const d = {
+      p2: { rewrite: 'A common procurement process will be used across the four legal entities, with up to two approved approval variants per entity.', ask: 'Which entities need their own approval variants, and how many variants should be included in the price?' },
+      p3: { rewrite: 'Approvals use standard configurable approval workflows, with up to three approval levels per entity and no bespoke approval engine.', ask: 'How many approval levels does each entity need, and are emergency purchases part of the same approval route?' },
+      p4: { rewrite: 'The existing supplier portal remains outside Dynamics 365. No data synchronization is included; any synchronization would be a change request.', ask: 'Should supplier data stay in sync between the portal and D365, or can suppliers be updated manually in phase 1?' }
+    };
+    return d[id][mode];
+  }
+  set(id, patch) {
+    const f = Object.assign({}, this.state.f);
+    f[id] = Object.assign({}, f[id], patch);
+    this.setState({ f: f });
+  }
+  tog(key, id) {
+    const o = Object.assign({}, this.state[key]);
+    o[id] = !o[id];
+    const patch = {};
+    patch[key] = o;
+    this.setState(patch);
+  }
+  view(id) {
+    const s = this.state.f[id];
+    const self = this;
+    return {
+      open: s.status === 'open' && !s.panel && !s.keepPanel,
+      panel: s.panel, keepPanel: s.keepPanel,
+      clarified: s.status === 'clarified', risk: s.status === 'risk',
+      tag: s.status === 'open' ? 'Vague' : (s.status === 'clarified' ? 'Clarified' : 'Risk accepted'),
+      tagCls: s.status === 'clarified' ? 'green' : 'amber',
+      clsRewrite: s.mode === 'rewrite' ? 'on' : '', clsAsk: s.mode === 'ask' ? 'on' : '',
+      text: s.text || self.drafts(id, s.mode),
+      reason: s.reason, keepDisabled: s.reason.trim().length === 0,
+      clarify: () => self.set(id, { panel: true, keepPanel: false, text: self.drafts(id, s.mode) }),
+      keep: () => self.set(id, { keepPanel: true, panel: false }),
+      cancel: () => self.set(id, { panel: false, keepPanel: false }),
+      pickRewrite: () => self.set(id, { mode: 'rewrite', text: self.drafts(id, 'rewrite') }),
+      pickAsk: () => self.set(id, { mode: 'ask', text: self.drafts(id, 'ask') }),
+      setText: (e) => self.set(id, { text: e.target.value }),
+      setReason: (e) => self.set(id, { reason: e.target.value }),
+      save: () => self.set(id, { status: 'clarified', panel: false, text: s.text || self.drafts(id, s.mode) }),
+      saveKeep: () => self.set(id, { status: 'risk', keepPanel: false })
+    };
+  }
+  renderVals() {
+    const st = this.state;
+    const ids = ['p2', 'p3', 'p4'];
+    const openIds = ids.filter((i) => st.f[i].status === 'open');
+    const names = openIds.map((i) => i.toUpperCase());
+    const tg = (key, id) => ({ open: !!st[key][id], toggle: () => this.tog(key, id) });
+    return {
+      f2: this.view('p2'), f3: this.view('p3'), f4: this.view('p4'),
+      x1: tg('x', 'p1'), x5: tg('x', 'p5'), x6: tg('x', 'p6'),
+      s2: tg('s', 'p2'), s3: tg('s', 'p3'), s4: tg('s', 'p4'),
+      m2: tg('m', 'p2'), m3: tg('m', 'p3'), m4: tg('m', 'p4'),
+      locked: st.locked, draft: !st.locked, lockedOnly: st.locked && !st.v2,
+      v2: st.v2, v2pending: !st.v2,
+      propStatus: st.v2 ? 'Approved · v2' : 'Awaiting Delivery Lead',
+      propCls: st.v2 ? 'green' : 'amber',
+      approveV2: () => this.setState({ v2: true, rcToast: true }),
+      rcToast: st.rcToast, hideRc: () => this.setState({ rcToast: false }),
+      modal: st.modal, openModal: () => this.setState({ modal: true }), closeModal: () => this.setState({ modal: false }),
+      lock: () => this.setState({ modal: false, locked: true }),
+      vagueLabel: openIds.length === 0 ? 'No vague promises left open' : openIds.length + ' vague promise(s) still open: ' + names.join(', '),
+      vagueCls: openIds.length === 0 ? 'green' : 'amber',
+      anyVague: openIds.length > 0, noVague: openIds.length === 0,
+      modalVague: names.join(' and ') + (names.length > 1 ? ' are still vague. Lock anyway?' : ' is still vague. Lock anyway?'),
+      lockLabel: openIds.length > 0 ? 'Lock anyway as v1' : 'Lock as v1',
+      gapOpen: st.gap === '', gapDone: st.gap !== '', gapLabel: st.gap,
+      addGap: () => this.setState({ gap: 'Added as promise P7 (draft) · Lina Haddad, Oct 1' }),
+      gapOut: () => this.setState({ gap: 'Marked out of scope · reason recorded · Lina Haddad, Oct 1' }),
+      about: st.about, toggleAbout: () => this.setState({ about: !st.about }),
+      note: st.note, nope: () => this.setState({ note: true, m: {} }), clearNote: () => this.setState({ note: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

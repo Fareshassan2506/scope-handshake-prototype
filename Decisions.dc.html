@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sold vs Found</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.5;color:#141821;background:#F6F7F9;-webkit-font-smoothing:antialiased}
+a{color:#1B2B4B;text-decoration:none}
+a:hover{color:#0E1A33}
+h1,h2,h3,h4{font-family:'Space Grotesk',ui-sans-serif,sans-serif;font-weight:500;margin:0;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+.app{display:flex;flex-wrap:wrap;min-height:100vh;align-items:flex-start}
+.side{width:240px;flex:0 0 240px;background:#fff;border-right:1px solid #E4E7EC;padding:20px 14px 28px;align-self:stretch}
+.main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column}
+.wm{display:flex;align-items:center;gap:9px;padding:4px 8px 22px}
+.wm span{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em;color:#1B2B4B}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a,.nav button{display:flex;align-items:center;gap:10px;min-height:34px;padding:0 10px;border-radius:8px;color:#495363;font-size:13.5px;background:none;border:none;text-align:left;width:100%}
+.nav a:hover,.nav button:hover{background:#F6F7F9;color:#1B2B4B}
+.nav a.on{background:#F0EAFF;color:#5B37AE;font-weight:600}
+.nav svg{flex:0 0 16px;color:#8A93A3}
+.nav a.on svg{color:#6B46C1}
+.divider{height:1px;background:#E4E7EC;margin:12px 6px}
+.top{min-height:64px;background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap}
+.search{flex:1 1 220px;max-width:420px;height:36px;border:1px solid #E4E7EC;border-radius:8px;padding:0 12px;background:#F6F7F9;color:#495363;font:inherit}
+.concept{font-size:11px;color:#5B6472;border:1px dashed #C9CFD9;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.who{display:flex;align-items:center;gap:10px;margin-left:auto}
+.av{width:32px;height:32px;border-radius:999px;background:#1B2B4B;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;flex:0 0 32px}
+.av.p{background:#6B46C1}
+.crumb{background:#fff;border-bottom:1px solid #E4E7EC;display:flex;align-items:center;gap:9px;padding:11px 24px;color:#5B6472;font-size:13px;flex-wrap:wrap}
+.crumb b{color:#141821;font-weight:500}
+.crumb button{background:none;border:none;padding:0;font:inherit;color:#1B2B4B}
+.body{padding:18px 24px 24px;display:flex;flex-direction:column;gap:20px;position:relative}
+.soft{background:#fff;border-radius:12px;padding:18px 20px}
+.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1px solid #DFE3E8;background:#F1F3F5;color:#434C5A;white-space:nowrap}
+.pill.green{background:#E9F7EF;border-color:#A9DCBF;color:#13603A}
+.pill.red{background:#FDEDEB;border-color:#F0B7B0;color:#9F2318}
+.pill.amber{background:#FFF6E0;border-color:#EFD69B;color:#7A5000}
+.pill.blue{background:#EDF2FF;border-color:#BBCAF7;color:#1C44B8}
+.pill.purple{background:#F4F0FF;border-color:#CDBDF3;color:#5B37AE}
+.new{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;background:#F0EAFF;border:1px solid #C9B8F2;color:#5B37AE;white-space:nowrap}
+.sht{font-size:11px;font-family:'Space Grotesk',sans-serif;color:#495363;background:#F1F3F5;border:1px solid #DFE3E8;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.tok{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1.5px solid #A9DCBF;background:#F3FBF6;color:#13603A;white-space:nowrap}
+.tai{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;border:1.5px dashed #C9B8F2;background:#FAF8FF;color:#5B37AE;white-space:nowrap}
+.btn{height:38px;padding:0 16px;border-radius:9px;border:1px solid #1B2B4B;background:#1B2B4B;color:#fff;font-weight:500;font-size:13.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#13213C}
+.btn.ghost{background:#fff;color:#1B2B4B;border-color:#C6CFDD}
+.btn.ghost:hover{background:#F2F5FA}
+.btn.sm{height:32px;padding:0 12px;font-size:12.5px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.seg{display:inline-flex;background:#EEF1F6;border-radius:10px;padding:3px;gap:2px}
+.seg button{background:none;border:none;border-radius:8px;padding:7px 14px;font-size:13px;color:#495363}
+.seg button.on{background:#fff;color:#1B2B4B;font-weight:600;box-shadow:0 1px 3px rgba(20,24,33,.12)}
+.chip{height:28px;padding:0 11px;border-radius:999px;border:1px solid #D7DCE4;background:#fff;color:#495363;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
+.chip.on{background:#1B2B4B;border-color:#1B2B4B;color:#fff;font-weight:500}
+.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7A8494;font-weight:600}
+.muted{color:#5B6472}
+.mono{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
+.foot{font-size:11.5px;color:#7A8494}
+.stepper{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;background:#fff;border:1px solid #E4E7EC;border-radius:12px;padding:8px}
+.stepper a{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;font-size:13px;color:#5B6472}
+.stepper a:hover{background:#F6F7F9}
+.stepper a.on{background:#1B2B4B;color:#fff;font-weight:500}
+.stepper a.on .num{background:rgba(255,255,255,.22);color:#fff}
+.num{width:20px;height:20px;border-radius:999px;background:#EEF1F6;color:#495363;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600}
+.sep{display:flex;align-items:center;color:#C2C9D4}
+.about{background:none;border:none;padding:0;font-size:12.5px;color:#5B6472;display:inline-flex;align-items:center;gap:6px;align-self:flex-start}
+.aboutbox{font-size:13px;color:#434C5A;background:#fff;border-radius:10px;padding:11px 14px;max-width:760px}
+.q{width:22px;height:22px;border-radius:999px;border:1px solid #C2C9D4;background:#fff;color:#5B6472;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.legend{font-size:12.5px;color:#434C5A;background:#fff;border-radius:10px;padding:10px 14px;display:flex;gap:14px;flex-wrap:wrap;box-shadow:0 10px 26px rgba(20,24,33,.12)}
+.sect{display:flex;flex-direction:column;gap:10px}
+.shead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fcard{background:#fff;border-radius:12px;padding:15px 18px;display:flex;flex-direction:column;gap:9px}
+.fcard.red{box-shadow:inset 4px 0 0 #C0362C}
+.fcard.rc{box-shadow:inset 4px 0 0 #D98A00;animation:ripple 1.6s ease-out 2}
+@keyframes ripple{0%{box-shadow:inset 4px 0 0 #D98A00,0 0 0 0 rgba(217,138,0,.38)}70%{box-shadow:inset 4px 0 0 #D98A00,0 0 0 14px rgba(217,138,0,0)}100%{box-shadow:inset 4px 0 0 #D98A00,0 0 0 0 rgba(217,138,0,0)}}
+.fid{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:#1B2B4B}
+.sf{display:flex;gap:10px;font-size:13.5px;align-items:baseline}
+.sf b{flex:0 0 46px;font-family:'Space Grotesk',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.sf span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.info{display:inline-flex;width:16px;height:16px;border-radius:999px;border:1px solid #C2C9D4;color:#5B6472;align-items:center;justify-content:center;font-size:10px;font-family:'Space Grotesk',sans-serif;cursor:help;background:#fff}
+.lockbox{background:#F1F3F5;border-radius:9px;padding:9px 11px;font-size:12px;color:#495363;display:flex;gap:8px;align-items:center}
+.toast{position:absolute;top:14px;right:24px;width:360px;max-width:calc(100% - 48px);background:#fff;border:1px solid #D7DCE4;border-left:4px solid #1B2B4B;border-radius:12px;box-shadow:0 14px 34px rgba(20,24,33,.14);padding:14px 16px;display:flex;gap:11px;z-index:60}
+input[type=checkbox]{width:17px;height:17px;accent-color:#1B2B4B}
+textarea{font:inherit;border:1px solid #D7DCE4;border-radius:9px;padding:10px 12px;resize:vertical;color:#141821;width:100%;min-height:92px}
+.collapse{background:none;border:none;padding:0;display:inline-flex;align-items:center;gap:7px;font-size:13px;color:#5B6472}
+.navi{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #E4E7EC;padding-top:14px}
+.tour{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:flex-end;gap:8px;background:#fff;border-bottom:1px solid #E4E7EC;padding:8px 24px}
+.tour .tl{font-size:12px;color:#7A8494;margin-right:auto}
+.tour a.tb{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 13px;border-radius:8px;font-size:12.5px;font-weight:500;text-decoration:none;border:1px solid #C6CFDD;color:#1B2B4B;background:#fff}
+.tour a.tb:hover{background:#F2F5FA}
+.tour a.tb.next{background:#1B2B4B;border-color:#1B2B4B;color:#fff}
+.tour a.tb.next:hover{background:#13213C}
+.xbar{display:flex;height:12px;border-radius:999px;overflow:hidden;gap:2px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+</style>
+</helmet>
+
+<div class="app">
+  <aside class="side">
+    <div class="wm">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="5" cy="5" r="3" fill="#1B2B4B"></circle><circle cx="15" cy="5" r="3" fill="#6B46C1"></circle><circle cx="5" cy="15" r="3" fill="#6B46C1"></circle><circle cx="15" cy="15" r="3" fill="#1B2B4B"></circle></svg>
+      <span>peaktify</span>
+    </div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 7L8 2.5 13.5 7v6.5h-11z"></path><path d="M6.5 13.5v-4h3v4"></path></svg>Home</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 4.5h5l1.2 1.5H14v7.5H2z"></path></svg>Projects</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 11-2.1-4.3"></path><path d="M13.8 2.5v3.2h-3.2"></path></svg>Work Cycles</button>
+      <a class="on" href="Decisions.dc.html"><svg width="16" height="16" viewBox="0 0 20 16" aria-hidden="true"><path d="M9 2a6 6 0 000 12z" fill="currentColor"></path><path d="M11 2a6 6 0 010 12z" fill="#1B2B4B"></path></svg>Scope Handshake <span class="new" style="margin-left:auto">NEW</span></a>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 9.5l2-6h8l2 6v3.5H2z"></path></svg>Inbox</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.3" y="3.3" width="11.4" height="10.4" rx="1.5"></rect></svg>Calendar</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 13.5V4l5-2 5 2v9.5"></path></svg>Customers</button>
+    </nav>
+    <div class="divider"></div>
+    <nav class="nav">
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="6" cy="6" r="2.4"></circle><path d="M2 13.5c0-2.2 1.8-3.6 4-3.6s4 1.4 4 3.6"></path></svg>Members</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.6 4.8 4.8 1.6-4.8 1.6L8 14.4l-1.6-4.8L1.6 8l4.8-1.6z" fill="none" stroke="currentColor" stroke-width="1.3"></path></svg>Agents</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.6"></rect><circle cx="8" cy="8" r="2.4"></circle></svg>Private Vault</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8 2l5 2v4c0 3-2.1 5.2-5 6-2.9-.8-5-3-5-6V4z"></path></svg>Security</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="2.2"></circle><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2"></path></svg>Settings</button>
+      <button type="button" onClick="{{nope}}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 2v4M10 2v4M4.5 6h7v3.5a3.5 3.5 0 01-7 0zM8 13v1.8"></path></svg>Integrations</button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <input class="search" type="search" aria-label="Search" value="Search projects, work cycles, artifacts…">
+      <span class="concept">Concept prototype — Scope Handshake (not a Peaktify release)</span>
+      <div class="who">
+        <span class="muted mono" style="font-size:12.5px">Tuesday, October 20, 2026</span>
+        <span class="av {{avCls}}">{{initials}}</span>
+        <span class="col" style="line-height:1.25"><b style="font-size:13px">{{viewer}}</b><span class="muted" style="font-size:11.5px">{{role}}</span></span>
+      </div>
+    </header>
+    <nav class="tour" aria-label="Screen navigation"><span class="tl">Screen 4 of 8</span><a class="tb back" href="FollowUps.dc.html">← Follow-ups heads-up</a><a class="tb next" href="FindingDetail.dc.html">Finding · the handshake →</a></nav>
+
+    <nav class="crumb">
+      <a href="Main.dc.html">← Back</a>
+      <span style="color:#C2C9D4">|</span>
+      <span>Atlas Industrial Group</span>
+      <span>›</span>
+      <a href="Main.dc.html">ATLAS-D365-F&amp;SCM</a>
+      <span>›</span>
+      <b>Sold vs Found</b>
+    </nav>
+
+    <div class="body">
+      <sc-if value="{{note}}" hint-placeholder-val="{{ false }}">
+        <div class="toast" role="status">
+          <div class="col" style="gap:3px;flex:1 1 auto;min-width:0"><b style="font-size:13.5px">Not part of this prototype.</b><span class="muted" style="font-size:12.5px">Only the Scope Handshake path is built out.</span></div>
+          <button class="btn sm ghost" type="button" onClick="{{clearNote}}">Close</button>
+        </div>
+      </sc-if>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="stepper" role="navigation" aria-label="Scope Handshake story">
+          <a href="PromiseList.dc.html"><span class="num">1</span>Promise</a>
+          <span class="sep">→</span>
+          <a class="on" href="Decisions.dc.html"><span class="num">2</span>Found</a>
+          <span class="sep">→</span>
+          <a href="FindingDetail.dc.html#step1"><span class="num">3</span>Check</a>
+          <span class="sep">→</span>
+          <a href="FindingDetail.dc.html#step2"><span class="num">4</span>Decide</a>
+          <span class="sep">→</span>
+          <a href="ChangeRequest.dc.html"><span class="num">5</span>Act</a>
+        </div>
+        <span class="sht">S4 · Oct 20 · 11:15</span>
+      </div>
+      <button class="about" type="button" onClick="{{toggleAbout}}">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="8" cy="8" r="6.2"></circle><path d="M8 7.2v4M8 5h.01"></path></svg>
+        About this screen
+      </button>
+      <sc-if value="{{about}}" hint-placeholder-val="{{ false }}">
+        <div class="aboutbox">Every Discovery finding, compared with what was sold. The Delivery Lead sees what needs her decision; the consultant sees what needs his check. Open a finding to understand it, check it and decide it on one page.</div>
+      </sc-if>
+
+      <div class="soft" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+        <div class="col" style="gap:7px;flex:1 1 320px;min-width:0">
+          <div class="row" style="gap:9px">
+            <h1 style="font-size:27px">Sold vs Found</h1>
+            <button class="q" type="button" onClick="{{toggleLegend}}" aria-label="Legend">?</button>
+            <span class="new"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0l1.3 4.7L12 6l-4.7 1.3L6 12 4.7 7.3 0 6l4.7-1.3z" fill="currentColor"></path></svg>NEW · Scope Handshake</span>
+          </div>
+          <b style="font-size:19px">{{headline}}</b>
+          <span class="muted" style="font-size:12.5px">9 findings · 3 included · 1 more detail · 2 more work · 1 conflict · 2 unclear · last checked 10 min ago</span>
+        </div>
+        <div class="row" style="gap:10px">
+          <svg width="104" height="64" viewBox="0 0 104 64" role="img" aria-label="4 of 9 findings match what was sold">
+            <path d="M12 54a40 40 0 0180 0" fill="none" stroke="#EEF1F6" stroke-width="11" stroke-linecap="round"></path>
+            <path d="M12 54a40 40 0 0180 0" fill="none" stroke="#2E8B57" stroke-width="11" stroke-linecap="round" stroke-dasharray="56 126"></path>
+            <text x="52" y="50" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="21" font-weight="600" fill="#141821">4/9</text>
+          </svg>
+          <span class="muted" style="font-size:12px;max-width:110px">match what was sold</span>
+        </div>
+      </div>
+
+      <div class="row" style="gap:14px;align-items:stretch">
+        <sc-if value="{{leadView}}" hint-placeholder-val="{{ true }}">
+          <div class="soft col" style="gap:10px;flex:1.4 1 420px;min-width:0">
+            <div class="row" style="justify-content:space-between"><span class="eyebrow">Scope exposure · fixed fee</span><span class="muted" style="font-size:11.5px">Visible to the Delivery Lead only</span></div>
+            <div class="row" style="gap:6px;align-items:baseline"><b class="mono" style="font-size:22px">44 of 120</b><span style="font-size:13.5px">priced days sit on lines Discovery is challenging</span></div>
+            <div class="xbar" role="img" aria-label="120 priced days: 76 not challenged, 44 challenged">
+              <i style="flex:76;background:#2E8B57"></i><i style="flex:26;background:#D98A00"></i><i style="flex:18;background:#E8B24A"></i>
+            </div>
+            <div class="row" style="gap:14px;font-size:12.5px">
+              <span class="row" style="gap:6px"><i class="sw" style="background:#2E8B57"></i>76 d not challenged</span>
+              <span class="row" style="gap:6px"><i class="sw" style="background:#D98A00"></i>26 d approvals · F-02</span>
+              <span class="row" style="gap:6px"><i class="sw" style="background:#E8B24A"></i>18 d shared design · F-05</span>
+            </div>
+            <div class="col" style="gap:5px;border-top:1px solid #E4E7EC;padding-top:9px;font-size:13px">
+              <span><b style="color:#9F2318">Priced at 0 days:</b> supplier portal integration · F-01 conflict</span>
+              <span><b style="color:#7A5000">Not priced at all:</b> emergency purchases · F-04 with the architect</span>
+              <span><b>Extra effort entered by people so far: 0 days.</b> <span class="muted">It fills in as decisions are recorded. AI never estimates effort.</span></span>
+            </div>
+          </div>
+        </sc-if>
+        <div class="soft col" style="gap:10px;flex:1 1 320px;min-width:0">
+          <div class="row" style="justify-content:space-between"><span class="eyebrow">AI on this project</span><span class="muted" style="font-size:11.5px">Updated with every human check</span></div>
+          <div class="row" style="gap:6px;align-items:baseline"><b class="mono" style="font-size:22px">5 of 6</b><span style="font-size:13.5px">checked findings kept as the AI suggested</span></div>
+          <div class="col" style="gap:6px;font-size:13px">
+            <span class="row" style="gap:8px"><span class="tok">✓ 5</span>confirmed as suggested</span>
+            <span class="row" style="gap:8px"><span class="tok">↺ 1</span>corrected · F-08 “Not in the deal” → Included (P6)</span>
+            <span class="row" style="gap:8px"><span class="pill">→ 1</span>AI said “Unknown” · sent to the architect (F-04)</span>
+            <span class="row" style="gap:8px"><span class="tai">✦ 2</span>waiting · F-02 consultant check · F-09 customer answer</span>
+          </div>
+          <span class="muted" style="font-size:12px;border-top:1px solid #E4E7EC;padding-top:8px">Pilot target: ≥75% of D365 labels kept. Every correction becomes a new test case for the AI.</span>
+        </div>
+      </div>
+
+      <sc-if value="{{legend}}" hint-placeholder-val="{{ false }}">
+        <div class="legend">
+          <span><span class="tai">✦</span> dashed = AI suggestion, needs check</span>
+          <span><span class="tok">✓</span> solid = confirmed by a person</span>
+          <span><span class="tok">↺</span> = AI was corrected</span>
+          <span>●●● confidence = how clear the evidence is</span>
+        </div>
+      </sc-if>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="seg" role="tablist">
+          <button type="button" class="{{segLead}}" onClick="{{asLead}}">Needs my decision</button>
+          <button type="button" class="{{segCons}}" onClick="{{asCons}}">Needs my check</button>
+          <button type="button" class="{{segAll}}" onClick="{{asAll}}">All</button>
+        </div>
+        <sc-if value="{{isCons}}" hint-placeholder-val="{{ false }}">
+          <span class="lockbox"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.6"></rect><path d="M5.5 7V5a2.5 2.5 0 015 0v2"></path></svg>Prices hidden for your role</span>
+        </sc-if>
+        <sc-if value="{{isAll}}" hint-placeholder-val="{{ false }}">
+          <div class="row" style="gap:6px">
+            <span class="eyebrow">Legal entity</span>
+            <span class="info" title="Configurable per project: legal entity, country or site">i</span>
+            <sc-for list="{{entities}}" as="e" hint-placeholder-count="5"><button type="button" class="chip {{e.cls}}" onClick="{{e.pick}}">{{e.label}}</button></sc-for>
+            <button type="button" class="chip {{localCls}}" onClick="{{toggleLocal}}">Local exceptions only</button>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{recheck}}" hint-placeholder-val="{{ false }}">
+        <div class="lockbox" style="background:#FFFBEF;color:#4A3A12"><b>Promise P2 moved to v2.</b> F-02 and F-05 are flagged Re-check — the Delivery Lead reviews them again; nothing is reversed automatically.</div>
+      </sc-if>
+
+      <sc-if value="{{isCons}}" hint-placeholder-val="{{ false }}">
+        <div class="sect">
+          <div class="shead"><h2 style="font-size:17px">Needs my check</h2><span class="pill purple">{{checkCount}}</span></div>
+          <sc-for list="{{checkRows}}" as="f" hint-placeholder-count="3">
+            <div class="fcard {{f.cls}}">
+              <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><span class="fid">{{f.id}}</span><span class="muted">· {{f.entity}}</span></span><span class="pill {{f.statusCls}}">{{f.status}}</span></div>
+              <div class="sf"><b style="color:#1B2B4B">Sold</b><span>{{f.sold}}</span></div>
+              <div class="sf"><b style="color:#5B37AE">Found</b><span>{{f.found}}</span></div>
+              <div class="row" style="justify-content:space-between">
+                <span class="row" style="gap:8px"><span class="tai">✦ {{f.tech}}</span><span class="pill {{f.commCls}}">{{f.comm}}</span></span>
+                <sc-if value="{{f.hasPage}}" hint-placeholder-val="{{ true }}"><a class="btn sm ghost" href="{{f.href}}">Open handshake →</a></sc-if>
+                
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showLead}}" hint-placeholder-val="{{ true }}">
+        <div class="sect">
+          <div class="shead"><h2 style="font-size:17px">Needs your decision</h2><span class="pill red">{{needCount}}</span></div>
+          <sc-for list="{{needRows}}" as="f" hint-placeholder-count="3">
+            <div class="fcard {{f.cls}}">
+              <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><span class="fid">{{f.id}}</span><span class="muted">· {{f.entity}}</span></span><span class="pill {{f.statusCls}}">{{f.status}}</span></div>
+              <div class="sf"><b style="color:#1B2B4B">Sold</b><span>{{f.sold}}</span></div>
+              <div class="sf"><b style="color:#5B37AE">Found</b><span>{{f.found}}</span></div>
+              <div class="row" style="justify-content:space-between">
+                <span class="row" style="gap:8px">
+                  <sc-if value="{{f.techOk}}" hint-placeholder-val="{{ true }}"><span class="tok">✓ {{f.tech}}</span></sc-if>
+                  <sc-if value="{{f.techAi}}" hint-placeholder-val="{{ false }}"><span class="tai">✦ {{f.tech}}</span></sc-if>
+                  <span class="pill {{f.commCls}}">{{f.comm}}</span>
+                  <sc-if value="{{f.local}}" hint-placeholder-val="{{ false }}"><span class="pill amber">Local exception</span></sc-if>
+                </span>
+                <a class="btn sm {{f.btnCls}}" href="{{f.href}}">Open handshake →</a>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div class="sect">
+          <div class="shead"><h2 style="font-size:17px">Waiting for the architect</h2><span class="pill amber">1</span></div>
+          <sc-if value="{{showF04}}" hint-placeholder-val="{{ true }}">
+            <div class="fcard">
+              <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><span class="fid">F-04</span><span class="muted">· Entity C</span></span><span class="pill amber"><svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.6"></rect><path d="M5.5 7V5a2.5 2.5 0 015 0v2"></path></svg>Locked until Sara Mansour confirms · due Oct 22</span></div>
+              <div class="sf"><b style="color:#1B2B4B">Sold</b><span>No promise covers emergency purchases — closest: “Emergency purchases work differently.”</span></div>
+              <div class="sf"><b style="color:#5B37AE">Found</b><span>Emergency purchases bypass parts of the requisition process; Finance needs retrospective control</span></div>
+              <div class="row" style="justify-content:space-between">
+                <span class="row" style="gap:8px"><span class="tai">✦ Unknown — related standard pattern (confirming POs), fit to validate</span><span class="pill">Unclear</span></span>
+                <a class="btn sm ghost" href="FindingDetail.dc.html#f04">Open handshake →</a>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="sect">
+          <div class="shead">
+            <h2 style="font-size:17px">Ready to approve together</h2><span class="pill green">3</span>
+            <span class="info" title="Included in what was sold · confirmed by a consultant · high confidence · no exceptions. Untick any item to review it individually. 10% of bulk approvals are spot-checked weekly.">i</span><span class="muted" style="font-size:12.5px">Why these 3?</span>
+          </div>
+          <sc-if value="{{notApproved}}" hint-placeholder-val="{{ true }}">
+            <sc-for list="{{ready}}" as="r" hint-placeholder-count="3">
+              <div class="fcard">
+                <div class="row" style="justify-content:space-between">
+                  <label class="row" style="gap:9px"><input type="checkbox" checked="{{r.checked}}" onChange="{{r.toggle}}"><span class="fid">{{r.id}}</span><span class="muted">· All entities</span></label>
+                  <span class="pill green">Ready</span>
+                </div>
+                <div class="sf"><b style="color:#1B2B4B">Sold</b><span>{{r.sold}}</span></div>
+                <div class="sf"><b style="color:#5B37AE">Found</b><span>{{r.found}}</span></div>
+                <div class="row" style="justify-content:space-between">
+                  <span class="row" style="gap:8px"><span class="tok">{{r.techMark}} {{r.tech}}</span><span class="pill green">Included ({{r.promise}})</span></span>
+                  <sc-if value="{{r.hasPage}}" hint-placeholder-val="{{ false }}"><a class="btn sm ghost" href="{{r.href}}">Open handshake →</a></sc-if>
+                  
+                </div>
+              </div>
+            </sc-for>
+            <div class="row" style="gap:12px">
+              <button class="btn" type="button" onClick="{{approve}}" disabled="{{noneChecked}}">{{approveLabel}}</button>
+              <span class="muted" style="font-size:12.5px">Low-confidence items are never included in bulk approve.</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{approved}}" hint-placeholder-val="{{ false }}">
+            <div class="fcard" style="background:#F3FBF6">
+              <div class="row" style="gap:10px"><span style="color:#13603A"><svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8" cy="8" r="6.4"></circle><path d="M4.8 8.3l2.2 2.2 4.2-4.6"></path></svg></span><b>{{approvedCount}} findings approved as Included</b><span class="muted" style="font-size:12.5px">Lina Haddad bulk-approved F-06, F-07, F-08 · Oct 20, 11:20</span></div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div class="sect">
+          <div class="shead"><h2 style="font-size:17px">Waiting on customer</h2><span class="pill blue">1</span></div>
+          <div class="fcard">
+            <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><span class="fid">F-09</span><span class="muted">· All entities</span></span><span class="pill blue">Clock paused</span></div>
+            <div class="sf"><b style="color:#1B2B4B">Sold</b><span>Standard configurable approval workflows (P3) — the customer said they cannot lose current controls</span></div>
+            <div class="sf"><b style="color:#5B37AE">Found</b><span>Stakeholders disagree whether current approval controls are mandatory or historical practice</span></div>
+            <div class="row" style="justify-content:space-between">
+              <span class="row" style="gap:8px"><span class="tai">✦ Depends on the answer</span><span class="pill">Unclear · must-have or habit?</span></span>
+              <sc-if value="{{askIdle}}" hint-placeholder-val="{{ true }}"><button class="btn sm" type="button" onClick="{{openAsk}}">Ask David Chen</button></sc-if>
+              <sc-if value="{{askSent}}" hint-placeholder-val="{{ false }}"><span class="pill green">Sent · clock paused</span></sc-if>
+            </div>
+            <sc-if value="{{askOpen}}" hint-placeholder-val="{{ false }}">
+              <div class="col" style="gap:10px;background:#FCFAFF;border-radius:10px;padding:14px">
+                <div class="row" style="gap:9px"><span class="eyebrow">Message to David Chen · Group Finance Controller</span><span class="new">AI draft · edit before sending</span></div>
+                <textarea aria-label="Message to David Chen" value="{{askText}}" onChange="{{setAsk}}"></textarea>
+                <div class="row" style="gap:8px"><button class="btn sm" type="button" onClick="{{sendAsk}}">Send</button><button class="btn sm ghost" type="button" onClick="{{cancelAsk}}">Cancel</button></div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div class="sect">
+          <button class="collapse" type="button" onClick="{{toggleDecided}}">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" style="transform:rotate({{decRot}}deg)"><path d="M5 3l5 5-5 5"></path></svg>
+            <h2 style="font-size:17px;color:#141821">Decided</h2><span class="pill green">{{decidedCount}}</span>
+          </button>
+          <sc-if value="{{decidedOpen}}" hint-placeholder-val="{{ false }}">
+            <div class="fcard">
+              <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><span class="fid">F-03</span><span class="muted">· Entity A</span></span><span class="pill green">In baseline · Oct 16</span></div>
+              <div class="sf"><b style="color:#1B2B4B">Sold</b><span>Standard configurable approval workflows (P3)</span></div>
+              <div class="sf"><b style="color:#5B37AE">Found</b><span>Line-manager approval, thresholds, Procurement approval for selected categories</span></div>
+              <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><span class="tok">✓ Configuration</span><span class="pill blue">More detail</span></span></div>
+            </div>
+            <sc-if value="{{approved}}" hint-placeholder-val="{{ false }}">
+              <div class="fcard"><div class="row" style="gap:8px"><span class="fid">F-06</span><span class="fid">F-07</span><span class="fid">F-08</span><span class="pill green">Included · Oct 20, 11:20</span></div></div>
+            </sc-if>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <p class="foot" style="text-align:center;margin:8px 0 0">Findings and customer quotes come from the case brief; names, day counts and file names are illustrative.</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2360}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: 'lead', entity: 'All', localOnly: false, recheck: false,
+      approved: false, decidedOpen: false, legend: false, about: false, note: false,
+      ask: 'idle',
+      askText: 'Hi David — during Discovery, stakeholders disagreed whether the current approval controls are mandatory or historical practice. Could you confirm which controls Atlas must keep in phase 1, and which can follow the group template?',
+      checked: { 'F-06': true, 'F-07': true, 'F-08': true }
+    };
+  }
+  componentDidMount() {
+    try { if ((window.location.hash || '').indexOf('recheck') >= 0) this.setState({ recheck: true }); } catch (e) { /* no hash */ }
+  }
+  renderVals() {
+    const s = this.state;
+    const rc = s.recheck;
+    const need = [
+      { id: 'F-01', entity: 'All entities', status: 'Needs your decision · due Oct 22', statusCls: 'red', cls: 'red',
+        sold: 'Supplier portal stays outside Dynamics 365 (P4)', found: 'Supplier information and status must stay synchronized with Dynamics 365',
+        tech: 'Integration', techOk: true, comm: 'Conflict with P4', commCls: 'red', local: false, href: 'FindingDetail.dc.html#f01', btnCls: '' },
+      { id: 'F-02', entity: 'Entity B', status: rc ? 'Re-check · promise changed' : 'Needs check, then your decision · due Oct 21', statusCls: rc ? 'amber' : 'amber', cls: rc ? 'rc' : '',
+        sold: 'One shared approval design for all 4 companies (P2, P3)', found: 'Entity B approvals depend on dimension, category, amount, department',
+        tech: 'Configuration', techOk: false, comm: 'More work than priced', commCls: 'amber', local: false, href: 'FindingDetail.dc.html#f02', btnCls: 'ghost' },
+      { id: 'F-05', entity: 'Entity D', status: rc ? 'Re-check · promise changed' : 'Needs your decision · due Oct 26', statusCls: 'amber', cls: rc ? 'rc' : '',
+        sold: 'One shared process design across the four entities (P2)', found: 'Several local controls must remain during the first rollout',
+        tech: 'Configuration', techOk: true, comm: 'More work', commCls: 'amber', local: true, href: 'FindingDetail.dc.html#f05', btnCls: 'ghost' }
+    ];
+    const entOk = (e) => s.view !== 'all' || s.entity === 'All' || e === 'All entities' || e === s.entity;
+    const needRows = need.filter((f) => entOk(f.entity) && (!(s.view === 'all' && s.localOnly) || f.local)).map((f) => Object.assign({}, f, { techAi: !f.techOk }));
+    const ready = [
+      { id: 'F-06', sold: 'Standard financial controls, including budget checking (P6)', found: 'Budget availability must be checked before certain spending is approved', tech: 'Standard', techMark: '✓', promise: 'P6', hasPage: false },
+      { id: 'F-07', sold: 'Standard D365 procurement capabilities (P1)', found: 'Selected vendors must be restricted by procurement category', tech: 'Configuration', techMark: '✓', promise: 'P1', hasPage: false },
+      { id: 'F-08', sold: 'Standard financial controls (P6)', found: 'Supplier bank-account changes need stricter controls than other master data', tech: 'Standard', techMark: '✓ ↺', promise: 'P6', hasPage: true, href: 'FindingDetail.dc.html#f08' }
+    ];
+    const n = ready.filter((i) => s.checked[i.id]).length;
+    const checkRows = [
+      { id: 'F-02', entity: 'Entity B', status: 'Needs my check · due Oct 21', statusCls: 'purple', cls: '', sold: 'One shared approval design for all 4 companies (P2, P3)', found: 'Entity B approvals depend on dimension, category, amount, department', tech: 'Configuration (likely)', comm: 'More work than priced', commCls: 'amber', hasPage: true, href: 'FindingDetail.dc.html#f02' },
+      { id: 'F-04', entity: 'Entity C', status: 'With the architect · due Oct 22', statusCls: 'amber', cls: '', sold: 'No promise covers emergency purchases', found: 'Emergency purchases bypass parts of the requisition process', tech: 'Unknown — sent to architect', comm: 'Unclear', commCls: '', hasPage: true, href: 'FindingDetail.dc.html#f04' },
+      { id: 'F-09', entity: 'All entities', status: 'Waiting on customer', statusCls: 'blue', cls: '', sold: 'Standard configurable approval workflows (P3)', found: 'Stakeholders disagree whether current controls are mandatory or habit', tech: 'Depends on the answer', comm: 'Unclear', commCls: '', hasPage: false }
+    ].map((f) => Object.assign({}, f, { noPage: !f.hasPage }));
+    const ents = ['All', 'Entity A', 'Entity B', 'Entity C', 'Entity D'];
+    const cons = s.view === 'cons';
+    return {
+      viewer: cons ? 'Omar Farid' : 'Lina Haddad', role: cons ? 'Functional Consultant' : 'Delivery Lead', initials: cons ? 'OF' : 'LH', avCls: cons ? 'p' : '',
+      leadView: !cons,
+      headline: cons ? '3 findings need your check' : '3 decisions need you',
+      segLead: s.view === 'lead' ? 'on' : '', segCons: cons ? 'on' : '', segAll: s.view === 'all' ? 'on' : '',
+      asLead: () => this.setState({ view: 'lead' }), asCons: () => this.setState({ view: 'cons' }), asAll: () => this.setState({ view: 'all' }),
+      isCons: cons, isAll: s.view === 'all', showLead: !cons,
+      entities: ents.map((e) => ({ label: e === 'All' ? 'All' : e.replace('Entity ', ''), cls: s.entity === e ? 'on' : '', pick: () => this.setState({ entity: e }) })),
+      localCls: s.localOnly ? 'on' : '', toggleLocal: () => this.setState({ localOnly: !s.localOnly }),
+      recheck: rc,
+      needRows: needRows, needCount: needRows.length,
+      showF04: s.view !== 'all' || ((s.entity === 'All' || s.entity === 'Entity C') && !s.localOnly),
+      checkRows: checkRows, checkCount: checkRows.length,
+      ready: ready.map((i) => Object.assign({}, i, {
+        noPage: !i.hasPage, checked: !!s.checked[i.id],
+        toggle: () => { const next = Object.assign({}, s.checked); next[i.id] = !next[i.id]; this.setState({ checked: next }); }
+      })),
+      approveLabel: 'Approve ' + n + ' as Included', noneChecked: n === 0,
+      approved: s.approved, notApproved: !s.approved, approvedCount: n,
+      approve: () => this.setState({ approved: true }),
+      decidedCount: s.approved ? 1 + n : 1, decidedOpen: s.decidedOpen, decRot: s.decidedOpen ? 90 : 0,
+      toggleDecided: () => this.setState({ decidedOpen: !s.decidedOpen }),
+      askIdle: s.ask === 'idle', askOpen: s.ask === 'open', askSent: s.ask === 'sent', askText: s.askText,
+      setAsk: (e) => this.setState({ askText: e.target.value }),
+      openAsk: () => this.setState({ ask: 'open' }), cancelAsk: () => this.setState({ ask: 'idle' }), sendAsk: () => this.setState({ ask: 'sent' }),
+      legend: s.legend, toggleLegend: () => this.setState({ legend: !s.legend }),
+      about: s.about, toggleAbout: () => this.setState({ about: !s.about }),
+      note: s.note, nope: () => this.setState({ note: true }), clearNote: () => this.setState({ note: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
